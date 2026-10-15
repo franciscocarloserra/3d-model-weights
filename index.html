@@ -51,7 +51,7 @@
 </style>
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 </head><body>
-<nav id="side"><a id="brand" href="?"><img src="logo.png" alt="">3D Model Weights</a><a class="from" href="https://franciscocarloserra.github.io/hf-top-models/">top 300 by likes ↗</a><a class="from" href="https://github.com/franciscocarloserra/3d-model-weights">source on GitHub ↗</a><a class="from" href="https://x.com/francarloerra">@francarloerra on X ↗</a><label id="load" title="front-end only, nothing is uploaded!">Load a custom model<input id="files" type="file" multiple accept=".safetensors" hidden></label><input id="q" autocomplete="off" placeholder="filter"><div id="list"></div><p id="note">Tensor names and shapes belong to the original model owners, under each model's license. No weights included. MIT code.</p></nav>
+<nav id="side"><a id="brand" href="?"><img src="logo.png" alt="">3D Model Weights</a><a class="from" href="https://franciscocarloserra.github.io/hf-top-models/">top 300 by likes ↗</a><a class="from" href="https://github.com/franciscocarloserra/3d-model-weights">source on GitHub ↗</a><a class="from" href="https://x.com/francarloerra">@francarloerra on X ↗</a><label id="load" title="front-end only, nothing is uploaded!">Load a custom model<input id="files" type="file" multiple accept=".safetensors,.gguf" hidden></label><input id="q" autocomplete="off" placeholder="filter"><div id="list"></div><p id="note">Tensor names and shapes belong to the original model owners, under each model's license. No weights included. MIT code.</p></nav>
 <header><h1><a id="title" target="_blank" rel="noopener"></a><span id="msg"></span></h1><div id="cards"></div></header>
 <div id="view"><div id="card" hidden></div><div id="why" hidden></div><button id="hint">hide hint</button><button id="det">hide details</button></div>
 <aside id="raw"><input id="rq" autocomplete="off" placeholder="filter tensors"><div id="rows"></div></aside>
@@ -90,20 +90,23 @@ const LABEL_EVERY = 8;   // layer index label every N layers
 const LABELED_TYPES = 3; // per stack, label the first N distinct layer types
 const THICK = 0.06;
 const TRACE_PX = {flow: 2, spine: 3};  // selection trace widths in pixels
+const GGUF_CHUNK = 4 << 20;  // bytes read per step while walking a gguf header
 const OPACITY = {base: 0.22, hot: 0.8, sel: 0.85, dim: 0.05};
 const KINDS = [          // first match wins
   ['linear attn', /linear_attn/, 0x3fb8a8],
   ['attention', /attn|attention|q_proj|k_proj|v_proj|o_proj/, 0x5b8def],
   ['mlp', /mlp|ffn|feed_forward|expert|fc\d|\.ff\./, 0xe0904a],
-  ['embed/head', /embed|lm_head|wte|wpe/, 0x8a8f98],
+  ['embed/head', /embed|embd|lm_head|wte|wpe|^output\./, 0x8a8f98],
   ['other', /./, 0xb07ad8],
 ];
-const BYTES = {F64: 8, I64: 8, U64: 8, F32: 4, I32: 4, U32: 4, F16: 2, BF16: 2, I16: 2, U16: 2, F8_E4M3: 1, F8_E5M2: 1, F8_E8M0: 1, I8: 1, U8: 1, BOOL: 1, F4: 0.5, F6_E2M3: 0.75, F6_E3M2: 0.75};
+const BYTES = {F64: 8, I64: 8, U64: 8, F32: 4, I32: 4, U32: 4, F16: 2, BF16: 2, I16: 2, U16: 2, F8_E4M3: 1, F8_E5M2: 1, F8_E8M0: 1, I8: 1, U8: 1, BOOL: 1, F4: 0.5, F6_E2M3: 0.75, F6_E3M2: 0.75,
+  Q4_0: 0.5625, Q4_1: 0.625, Q5_0: 0.6875, Q5_1: 0.75, Q8_0: 1.0625, Q8_1: 1.125, Q2_K: 0.328, Q3_K: 0.43, Q4_K: 0.5625, Q5_K: 0.6875, Q6_K: 0.82, Q8_K: 1.14,
+  IQ2_XXS: 0.258, IQ2_XS: 0.289, IQ3_XXS: 0.383, IQ1_S: 0.195, IQ4_NL: 0.5625, IQ3_S: 0.43, IQ2_S: 0.3125, IQ4_XS: 0.531, IQ1_M: 0.219, TQ1_0: 0.21, TQ2_0: 0.26, MXFP4: 0.53};  // gguf: bits per weight / 8
 const IS_MLP = /mlp|ffn|feed_forward|expert|\.ff\./;
-const IS_INPUT = /embed|patch|pos_|^mtp\.fc|x_embedder|context_embedder|time_|wte|wpe|conv_in|stem/;
+const IS_INPUT = /embed|token_embd|patch|pos_|^mtp\.fc|x_embedder|context_embedder|time_|wte|wpe|conv_in|stem/;
 const IS_VISION = /visual|vision|vit|siglip|image_encoder/;
 const IS_MTP = /(^|\.)mtp(\.|$)|nextn/;
-const WRITES = /(^|\.)(o_proj|out_proj|down_proj|fc2|linear_fc2|proj|proj_out|to_out|w2|wo|lm_head)(\.|$)/;  // write the residual stream
+const WRITES = /(^|\.)(o_proj|out_proj|down_proj|fc2|linear_fc2|proj|proj_out|to_out|w2|wo|lm_head|attn_output|ffn_down|ffn_down_exps|ssm_out|output)(\.|$)/;  // write the residual stream
 
 const list = document.getElementById('list'), msg = document.getElementById('msg'), info = document.getElementById('info');
 // custom model: read only the safetensors headers in the browser (8-byte length + JSON), nothing is uploaded
@@ -121,16 +124,49 @@ const compact = files => {  // [[path, header]] -> {name: [dtype, shape, count]}
   }
   return out;
 };
+const GGML = {0: 'F32', 1: 'F16', 2: 'Q4_0', 3: 'Q4_1', 6: 'Q5_0', 7: 'Q5_1', 8: 'Q8_0', 9: 'Q8_1', 10: 'Q2_K', 11: 'Q3_K', 12: 'Q4_K', 13: 'Q5_K', 14: 'Q6_K', 15: 'Q8_K',
+  16: 'IQ2_XXS', 17: 'IQ2_XS', 18: 'IQ3_XXS', 19: 'IQ1_S', 20: 'IQ4_NL', 21: 'IQ3_S', 22: 'IQ2_S', 23: 'IQ4_XS', 24: 'I8', 25: 'I16', 26: 'I32', 27: 'I64', 28: 'F64', 29: 'IQ1_M', 30: 'BF16', 34: 'TQ1_0', 35: 'TQ2_0', 39: 'MXFP4'};
+const gguf = async f => {  // walk the binary header in chunks (metadata can hold a multi-MB vocab) -> {name: {dtype, shape}}
+  let buf = new Uint8Array(0), dv, pos = 0, base = 0;
+  const need = async n => {
+    if (pos + n <= buf.length) return;
+    const more = new Uint8Array(await f.slice(base + buf.length, base + buf.length + Math.max(n, GGUF_CHUNK)).arrayBuffer());
+    if (!more.length) throw new Error('truncated gguf header');
+    const b = new Uint8Array(buf.length - pos + more.length); b.set(buf.subarray(pos)); b.set(more, buf.length - pos);
+    base += pos; buf = b; pos = 0; dv = new DataView(buf.buffer);
+  };
+  const u32 = async () => { await need(4); pos += 4; return dv.getUint32(pos - 4, true); };
+  const u64 = async () => { await need(8); pos += 8; return Number(dv.getBigUint64(pos - 8, true)); };
+  const str = async () => { const n = await u64(); await need(n); pos += n; return new TextDecoder().decode(buf.subarray(pos - n, pos)); };
+  const SIZE = {0: 1, 1: 1, 2: 2, 3: 2, 4: 4, 5: 4, 6: 4, 7: 1, 10: 8, 11: 8, 12: 8};
+  const skip = async type => {
+    if (type === 8) { const n = await u64(); await need(n); pos += n; }
+    else if (type === 9) { const t = await u32(), n = await u64(); if (SIZE[t]) { await need(SIZE[t] * n); pos += SIZE[t] * n; } else for (let i = 0; i < n; i++) await skip(t); }
+    else { await need(SIZE[type]); pos += SIZE[type]; }
+  };
+  if (await u32() !== 0x46554747) throw new Error(`${f.name}: not a gguf file`);
+  await u32();  // version
+  const nT = await u64(), nKV = await u64(), out = {};
+  for (let i = 0; i < nKV; i++) { await str(); await skip(await u32()); }
+  for (let i = 0; i < nT; i++) {
+    const name = await str(), nd = await u32(), dims = [];
+    for (let j = 0; j < nd; j++) dims.push(await u64());
+    const type = await u32(); await u64();  // data offset
+    out[name] = {dtype: GGML[type] ?? `T${type}`, shape: dims.reverse()};  // ggml lists the fastest dim first: flip to [out, in]
+  }
+  return out;
+};
+const safetensors = async f => {
+  const n = Number(new DataView(await f.slice(0, 8).arrayBuffer()).getBigUint64(0, true));
+  return JSON.parse(await f.slice(8, 8 + n).text());
+};
 const loadLocal = async fs => {
-  fs = [...fs].filter(f => f.name.endsWith('.safetensors'));
+  fs = [...fs].filter(f => /\.(safetensors|gguf)$/.test(f.name));
   if (!fs.length) return;
-  const files = await Promise.all(fs.map(async f => {
-    const n = Number(new DataView(await f.slice(0, 8).arrayBuffer()).getBigUint64(0, true));
-    return [(f.webkitRelativePath || f.name).split('/').slice(1).join('/') || f.name, JSON.parse(await f.slice(8, 8 + n).text())];
-  }));
+  const files = await Promise.all(fs.map(async f => [(f.webkitRelativePath || f.name).split('/').slice(1).join('/') || f.name, await (f.name.endsWith('.gguf') ? gguf : safetensors)(f)]));
   const top = fs[0].webkitRelativePath?.split('/')[0];
   const tensors = compact(files);
-  sessionStorage.setItem('local', JSON.stringify({id: `local/${top || fs[0].name.replace(/\.safetensors$/, '')}`, tensors, n_files: fs.length, n_tensors: files.reduce((a, [, h]) => a + Object.keys(h).length - ('__metadata__' in h), 0)}));
+  sessionStorage.setItem('local', JSON.stringify({id: `local/${top || fs[0].name.replace(/\.(safetensors|gguf)$/, '')}`, tensors, n_files: fs.length, n_tensors: files.reduce((a, [, h]) => a + Object.keys(h).length - ('__metadata__' in h), 0)}));
   location.search = '?m=__local';
 };
 document.getElementById('files').onchange = e => loadLocal(e.target.files);
@@ -185,7 +221,7 @@ const fmtB = b => b >= 1e12 ? (b / 1e12).toFixed(2) + ' TB' : b >= 1e9 ? (b / 1e
 const dtypes = Object.entries(byDtype).sort((a, b) => b[1] - a[1]).filter(([, b]) => b / bytes > 0.02).map(([d, b]) => `${d} ${Math.round(b / bytes * 100)}%`);
 const experts = Math.max(0, ...Object.entries(rec.tensors || {}).filter(([n, [, sh]]) => n.includes('.*.') || IS_MLP.test(n) && sh.length === 3 && sh[2] > FUSED_MIN).map(([n, [, sh, c]]) => n.includes('.*.') ? c : sh[0]));  // compact keeps layer index, so count = experts per layer
 // derived shapes: embedding [vocab, hidden], mlp up/gate [width, hidden] in the first main layer
-const emb = main?.input.find(t => /embed_tokens|tok_embeddings|word_embeddings|wte/.test(t.name));
+const emb = main?.input.find(t => /embed_tokens|tok_embeddings|word_embeddings|wte|token_embd/.test(t.name));
 const up = main && [...main.layers.values()][0]?.find(t => /(up|gate|gate_up)_proj|fc1|w1|w3/.test(t.key));
 const share = {};
 for (const [name, [, shape, count]] of Object.entries(rec.tensors || {})) { const k = KINDS.find(k => k[1].test(name))[0]; share[k] = (share[k] || 0) + numel(shape) * count; }
@@ -438,11 +474,11 @@ const detBtn = document.getElementById('det');
 const setDet = on => { view.classList.toggle('nodet', !on); detBtn.textContent = on ? 'hide details' : 'show details'; localStorage.setItem('details', on ? '1' : '0'); };
 setDet(localStorage.getItem('details') === '1'); detBtn.onclick = () => setDet(view.classList.contains('nodet'));
 const LAYER_TYPES = [  // [label, test on the layer's tensor names, one-line tentative explanation]; first match wins
-  ['linear attn + MoE', k => /linear_attn/.test(k) && /expert|\.moe|router/.test(k), 'Running-summary attention followed by routed experts, for long contexts at low cost.'],
+  ['linear attn + MoE', k => /linear_attn/.test(k) && /expert|\.moe|router|_exps/.test(k), 'Running-summary attention followed by routed experts, for long contexts at low cost.'],
   ['linear attn + MLP', k => /linear_attn/.test(k), 'A cheaper attention that keeps a running summary instead of comparing every pair of tokens, then a feed-forward network.'],
   ['mamba/SSM', k => /mamba|ssm|A_log|conv1d|mixer\.(in|out)_proj/.test(k), 'A state-space layer that carries a compressed memory of the sequence, read in one pass like an RNN.'],
   ['cross+self attn', k => /cross_attn|encoder_attn|attn2/.test(k), 'Tokens attend to each other and also to an outside signal, like a text prompt guiding an image or audio.'],
-  ['attention + MoE', k => /attn|attention|q_proj|qkv|to_q/.test(k) && /expert|\.moe|router/.test(k), 'Attention mixes the tokens, then a router sends each token to a few of many expert networks, so only part of the weights run per token.'],
+  ['attention + MoE', k => /attn|attention|q_proj|qkv|to_q/.test(k) && /expert|\.moe|router|_exps/.test(k), 'Attention mixes the tokens, then a router sends each token to a few of many expert networks, so only part of the weights run per token.'],
   ['attention + MLP', k => /attn|attention|q_proj|qkv|to_q/.test(k) && /mlp|ffn|feed_forward|fc\d|\.ff\./.test(k), 'Each token looks at the other tokens, then a feed-forward network transforms each one on its own.'],
   ['attention, no MLP', k => /attn|attention|q_proj|qkv|to_q/.test(k), 'Attention only; the transform step is elsewhere or named differently.'],
   ['conv/resnet', k => /conv|resnet/.test(k), 'Convolutions that mix nearby pixels or samples, typical of image and audio encoders and decoders.'],
