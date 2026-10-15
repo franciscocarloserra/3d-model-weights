@@ -802,5 +802,179 @@
   "id": "Comfy-Org/Qwen-Image-2.1",
   "rank": 134,
   "error": null
+ },
+ {
+  "file": "tencent__HunyuanVideo-1.5",
+  "id": "tencent/HunyuanVideo-1.5",
+  "rank": 135,
+  "error": null
+ },
+ {
+  "file": "poolside__Laguna-S-2.1",
+  "id": "poolside/Laguna-S-2.1",
+  "rank": 136,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen3.5-4B",
+  "id": "Qwen/Qwen3.5-4B",
+  "rank": 137,
+  "error": null
+ },
+ {
+  "file": "google__gemma-4-E2B-it",
+  "id": "google/gemma-4-E2B-it",
+  "rank": 138,
+  "error": null
+ },
+ {
+  "file": "TokenRhythm__NeoHorse-1-9B",
+  "id": "TokenRhythm/NeoHorse-1-9B",
+  "rank": 139,
+  "error": null
+ },
+ {
+  "file": "black-forest-labs__FLUX.2-klein-4B",
+  "id": "black-forest-labs/FLUX.2-klein-4B",
+  "rank": 140,
+  "error": null
+ },
+ {
+  "file": "krea__Krea-2-Raw",
+  "id": "krea/Krea-2-Raw",
+  "rank": 141,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a2af-3d10e8a62f29327b18d89234;ca5834a6-b9be-4951-a1d9-480c4243bd51)\n\nCannot access gated repo for url https://huggingface.co/krea/Krea-2-Raw/resolve/main/raw.safetensors.\nAccess to model krea/Krea-2-Raw is restricted and you are not in the au"
+ },
+ {
+  "file": "DavidAU__Qwen3.5-9B-The-Defiant-Fable-Uncensored-Heretic-NEO-IMATRIX-MAX-MTP-GGUF",
+  "id": "DavidAU/Qwen3.5-9B-The-Defiant-Fable-Uncensored-Heretic-NEO-IMATRIX-MAX-MTP-GGUF",
+  "rank": 142,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "mistralai__Voxtral-Mini-4B-Realtime-2602",
+  "id": "mistralai/Voxtral-Mini-4B-Realtime-2602",
+  "rank": 143,
+  "error": null
+ },
+ {
+  "file": "facebook__sam3.1",
+  "id": "facebook/sam3.1",
+  "rank": 144,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "Jiunsong__supergemma4-26b-uncensored-gguf-v2",
+  "id": "Jiunsong/supergemma4-26b-uncensored-gguf-v2",
+  "rank": 145,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "google__medgemma-1.5-4b-it",
+  "id": "google/medgemma-1.5-4b-it",
+  "rank": 146,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a2b3-28b1d7fa7ab9590573451ee5;bd988f16-9353-4448-a9ed-fd21035fd421)\n\nCannot access gated repo for url https://huggingface.co/google/medgemma-1.5-4b-it/resolve/main/model-00001-of-00002.safetensors.\nAccess to model google/medgemma-1.5-4b-it is"
+ },
+ {
+  "file": "jialinyyzz__humanizer",
+  "id": "jialinyyzz/humanizer",
+  "rank": 147,
+  "error": null
+ },
+ {
+  "file": "dx8152__Qwen-Edit-2509-Multiple-angles",
+  "id": "dx8152/Qwen-Edit-2509-Multiple-angles",
+  "rank": 148,
+  "error": null
+ },
+ {
+  "file": "Supertone__supertonic-3",
+  "id": "Supertone/supertonic-3",
+  "rank": 149,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "unsloth__Qwen3.6-35B-A3B-MTP-GGUF",
+  "id": "unsloth/Qwen3.6-35B-A3B-MTP-GGUF",
+  "rank": 150,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "unsloth__Qwen3.5-9B-GGUF",
+  "id": "unsloth/Qwen3.5-9B-GGUF",
+  "rank": 151,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "tencent__Hy3",
+  "id": "tencent/Hy3",
+  "rank": 152,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen-Image-2512",
+  "id": "Qwen/Qwen-Image-2512",
+  "rank": 153,
+  "error": null
+ },
+ {
+  "file": "netflix__void-model",
+  "id": "netflix/void-model",
+  "rank": 154,
+  "error": null
+ },
+ {
+  "file": "empero-ai__Qwythos-9B-Claude-Mythos-5-1M",
+  "id": "empero-ai/Qwythos-9B-Claude-Mythos-5-1M",
+  "rank": 155,
+  "error": null
+ },
+ {
+  "file": "unsloth__Qwen3.6-27B-GGUF",
+  "id": "unsloth/Qwen3.6-27B-GGUF",
+  "rank": 156,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "Comfy-Org__z_image_turbo",
+  "id": "Comfy-Org/z_image_turbo",
+  "rank": 157,
+  "error": null
+ },
+ {
+  "file": "google__timesfm-3.0-pytorch",
+  "id": "google/timesfm-3.0-pytorch",
+  "rank": 158,
+  "error": null
+ },
+ {
+  "file": "deepseek-ai__DeepSeek-V4-Flash-Vision-Exp",
+  "id": "deepseek-ai/DeepSeek-V4-Flash-Vision-Exp",
+  "rank": 159,
+  "error": null
+ },
+ {
+  "file": "mistralai__Voxtral-4B-TTS-2603",
+  "id": "mistralai/Voxtral-4B-TTS-2603",
+  "rank": 160,
+  "error": null
+ },
+ {
+  "file": "tencent__HY-Embodied-0.5",
+  "id": "tencent/HY-Embodied-0.5",
+  "rank": 161,
+  "error": null
+ },
+ {
+  "file": "prism-ml__Bonsai-27B-gguf",
+  "id": "prism-ml/Bonsai-27B-gguf",
+  "rank": 162,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "maya-research__maya1",
+  "id": "maya-research/maya1",
+  "rank": 163,
+  "error": null
  }
 ]
