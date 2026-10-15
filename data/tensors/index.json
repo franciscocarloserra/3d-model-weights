@@ -514,5 +514,293 @@
   "id": "deepseek-ai/DeepSeek-V3.2",
   "rank": 86,
   "error": null
+ },
+ {
+  "file": "MiniMaxAI__MiniMax-M2.5",
+  "id": "MiniMaxAI/MiniMax-M2.5",
+  "rank": 87,
+  "error": null
+ },
+ {
+  "file": "MiniMaxAI__MiniMax-M2",
+  "id": "MiniMaxAI/MiniMax-M2",
+  "rank": 88,
+  "error": null
+ },
+ {
+  "file": "k2-fsa__OmniVoice",
+  "id": "k2-fsa/OmniVoice",
+  "rank": 89,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen-Image-Edit-2511",
+  "id": "Qwen/Qwen-Image-Edit-2511",
+  "rank": 90,
+  "error": null
+ },
+ {
+  "file": "orcarouter__Qwen3.8-27B-Uncensored-GGUF",
+  "id": "orcarouter/Qwen3.8-27B-Uncensored-GGUF",
+  "rank": 91,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "MiniMaxAI__MiniMax-Music3",
+  "id": "MiniMaxAI/MiniMax-Music3",
+  "rank": 92,
+  "error": null
+ },
+ {
+  "file": "OBLITERATUS__Qwen3.8-27B-OBLITERATED",
+  "id": "OBLITERATUS/Qwen3.8-27B-OBLITERATED",
+  "rank": 93,
+  "error": null
+ },
+ {
+  "file": "prism-ml__Ternary-Bonsai-27B-gguf",
+  "id": "prism-ml/Ternary-Bonsai-27B-gguf",
+  "rank": 94,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "moonshotai__Kimi-K2.7-Code",
+  "id": "moonshotai/Kimi-K2.7-Code",
+  "rank": 95,
+  "error": null
+ },
+ {
+  "file": "fishaudio__s2-pro",
+  "id": "fishaudio/s2-pro",
+  "rank": 96,
+  "error": null
+ },
+ {
+  "file": "XHToken__Spark-X2.5-4B",
+  "id": "XHToken/Spark-X2.5-4B",
+  "rank": 97,
+  "error": null
+ },
+ {
+  "file": "Alissonerdx__BFS-Best-Face-Swap",
+  "id": "Alissonerdx/BFS-Best-Face-Swap",
+  "rank": 98,
+  "error": null
+ },
+ {
+  "file": "MiniMaxAI__MiniMax-M2.1",
+  "id": "MiniMaxAI/MiniMax-M2.1",
+  "rank": 99,
+  "error": null
+ },
+ {
+  "file": "HauhauCS__Gemma-4-E4B-Uncensored-HauhauCS-Aggressive",
+  "id": "HauhauCS/Gemma-4-E4B-Uncensored-HauhauCS-Aggressive",
+  "rank": 100,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "unsloth__Qwen3.6-27B-MTP-GGUF",
+  "id": "unsloth/Qwen3.6-27B-MTP-GGUF",
+  "rank": 101,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "microsoft__TRELLIS.2-4B",
+  "id": "microsoft/TRELLIS.2-4B",
+  "rank": 102,
+  "error": null
+ },
+ {
+  "file": "microsoft__VibeVoice-ASR",
+  "id": "microsoft/VibeVoice-ASR",
+  "rank": 103,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen3.8-2.4T-A95B",
+  "id": "Qwen/Qwen3.8-2.4T-A95B",
+  "rank": 104,
+  "error": null
+ },
+ {
+  "file": "microsoft__VibeVoice-Realtime-0.5B",
+  "id": "microsoft/VibeVoice-Realtime-0.5B",
+  "rank": 105,
+  "error": null
+ },
+ {
+  "file": "XingChen-AGI__TeleOCR",
+  "id": "XingChen-AGI/TeleOCR",
+  "rank": 106,
+  "error": null
+ },
+ {
+  "file": "google__diffusiongemma-26B-A4B-it",
+  "id": "google/diffusiongemma-26B-A4B-it",
+  "rank": 107,
+  "error": null
+ },
+ {
+  "file": "Tongyi-MAI__Z-Image",
+  "id": "Tongyi-MAI/Z-Image",
+  "rank": 108,
+  "error": null
+ },
+ {
+  "file": "huihui-ai__Huihui-Qwen3.8-27B-abliterated-GGUF",
+  "id": "huihui-ai/Huihui-Qwen3.8-27B-abliterated-GGUF",
+  "rank": 109,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "MiniMaxAI__MiniMax-M2.7",
+  "id": "MiniMaxAI/MiniMax-M2.7",
+  "rank": 110,
+  "error": null
+ },
+ {
+  "file": "tencent__Hy-MT2-1.8B",
+  "id": "tencent/Hy-MT2-1.8B",
+  "rank": 111,
+  "error": null
+ },
+ {
+  "file": "openbmb__MiniCPM-V-4.6",
+  "id": "openbmb/MiniCPM-V-4.6",
+  "rank": 112,
+  "error": null
+ },
+ {
+  "file": "kyutai__pocket-tts",
+  "id": "kyutai/pocket-tts",
+  "rank": 113,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a261-216a10a959af0789785e0bcf;50df5db5-e13a-4d87-8534-03d36a863eb2)\n\nCannot access gated repo for url https://huggingface.co/kyutai/pocket-tts/resolve/main/embeddings/alba.safetensors.\nAccess to model kyutai/pocket-tts is restricted and you a"
+ },
+ {
+  "file": "baidu__Qianfan-OCR",
+  "id": "baidu/Qianfan-OCR",
+  "rank": 114,
+  "error": null
+ },
+ {
+  "file": "black-forest-labs__FLUX.2-klein-base-9b-fp8",
+  "id": "black-forest-labs/FLUX.2-klein-base-9b-fp8",
+  "rank": 115,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a263-501d20b07f52386b27e102cf;6c6a4466-bd3a-44be-a9ce-57091d8b4f97)\n\nCannot access gated repo for url https://huggingface.co/black-forest-labs/FLUX.2-klein-base-9b-fp8/resolve/main/flux-2-klein-base-9b-fp8.safetensors.\nAccess to model black-f"
+ },
+ {
+  "file": "unsloth__gemma-4-26B-A4B-it-GGUF",
+  "id": "unsloth/gemma-4-26B-A4B-it-GGUF",
+  "rank": 116,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "nvidia__nemotron-3.5-asr-streaming-0.6b",
+  "id": "nvidia/nemotron-3.5-asr-streaming-0.6b",
+  "rank": 117,
+  "error": null
+ },
+ {
+  "file": "tencent__HY-MT1.5-1.8B",
+  "id": "tencent/HY-MT1.5-1.8B",
+  "rank": 118,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen3-VL-8B-Instruct",
+  "id": "Qwen/Qwen3-VL-8B-Instruct",
+  "rank": 119,
+  "error": null
+ },
+ {
+  "file": "CohereLabs__cohere-transcribe-03-2026",
+  "id": "CohereLabs/cohere-transcribe-03-2026",
+  "rank": 120,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a269-7a7dc5304f0a13913c7bcb9b;993b8913-1b33-4c3c-a49b-e78f8a7e4b88)\n\nCannot access gated repo for url https://huggingface.co/CohereLabs/cohere-transcribe-03-2026/resolve/main/model.safetensors.\nAccess to model CohereLabs/cohere-transcribe-03-"
+ },
+ {
+  "file": "Nanbeige__Nanbeige4.1-3B",
+  "id": "Nanbeige/Nanbeige4.1-3B",
+  "rank": 121,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen-Image-Layered",
+  "id": "Qwen/Qwen-Image-Layered",
+  "rank": 122,
+  "error": null
+ },
+ {
+  "file": "unsloth__Qwen3.8-Flash-Next-GGUF",
+  "id": "unsloth/Qwen3.8-Flash-Next-GGUF",
+  "rank": 123,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "Qwen__Qwen3-ASR-1.7B",
+  "id": "Qwen/Qwen3-ASR-1.7B",
+  "rank": 124,
+  "error": null
+ },
+ {
+  "file": "openbmb__MiniCPM5-1B",
+  "id": "openbmb/MiniCPM5-1B",
+  "rank": 125,
+  "error": null
+ },
+ {
+  "file": "zai-org__GLM-Image",
+  "id": "zai-org/GLM-Image",
+  "rank": 126,
+  "error": null
+ },
+ {
+  "file": "deepseek-ai__DeepSeek-OCR-2",
+  "id": "deepseek-ai/DeepSeek-OCR-2",
+  "rank": 127,
+  "error": null
+ },
+ {
+  "file": "m-a-p__YuE2-3B",
+  "id": "m-a-p/YuE2-3B",
+  "rank": 128,
+  "error": null
+ },
+ {
+  "file": "larryvrh__MiniMax-H3-Turbo-Lora",
+  "id": "larryvrh/MiniMax-H3-Turbo-Lora",
+  "rank": 129,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen3.5-27B",
+  "id": "Qwen/Qwen3.5-27B",
+  "rank": 130,
+  "error": null
+ },
+ {
+  "file": "bytedance-research__Lance",
+  "id": "bytedance-research/Lance",
+  "rank": 131,
+  "error": null
+ },
+ {
+  "file": "lightx2v__Minimax-h3-Turbo",
+  "id": "lightx2v/Minimax-h3-Turbo",
+  "rank": 132,
+  "error": null
+ },
+ {
+  "file": "ornith-ai__Ornith-1.0-35B-GGUF",
+  "id": "ornith-ai/Ornith-1.0-35B-GGUF",
+  "rank": 133,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "Comfy-Org__Qwen-Image-2.1",
+  "id": "Comfy-Org/Qwen-Image-2.1",
+  "rank": 134,
+  "error": null
  }
 ]
