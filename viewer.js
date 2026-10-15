@@ -1,0 +1,426 @@
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
+import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+import { loadLocal } from './load_local.js';
+
+for (const [c, def] of [['noside', '0'], ['noraw', '1']]) document.body.classList.toggle(c, (localStorage.getItem('pane-' + c) ?? def) === '1');  // before layout reads the view size; panes default: list open, tensors closed
+
+const SQRT_DIV = 16;     // side = sqrt(dim) / SQRT_DIV: keeps order of sizes, tames the vocab-sized embeddings
+const LAYER_GAP = [0.5, 6]; // min/max distance between layers; picked so the model's length fits the viewer's aspect
+const FIT = 1.15;        // camera margin around the model
+const COL_GAP = 1.2;     // gap between matrices
+const BLOCK_GAP = 4;     // gap between mixer (attention) and mlp blocks
+const STACK_GAP = 6;     // vertical gap between input / layers / output
+const SIDE_GAP = 25;     // gap between bands of secondary stacks
+const WRAP_GAP = 1.5;    // input/output rows wider than the layers wrap into lines this far apart
+const FUSED_MIN = 16;    // 3D tensor [n, out, in] with in > this = n fused experts, drawn as n stacked [out, in]
+const GRID = {cells: 40, color: 0x1c2027, major: 0x262b33};  // background grid behind the model, cells along its longest side
+const LABEL_CULL_MS = 150; // hide overlapping labels at most this often while the camera moves
+const LABEL_EVERY = 8;   // layer index label every N layers
+const LABELED_TYPES = 3; // per stack, label the first N distinct layer types
+const THICK = 0.06;
+const TRACE_PX = {flow: 2, spine: 3};  // selection trace widths in pixels
+const OPACITY = {base: 0.22, hot: 0.8, sel: 0.85, dim: 0.05};
+const KINDS = [          // first match wins
+  ['linear attn', /linear_attn/, 0x3fb8a8],
+  ['attention', /attn|attention|q_proj|k_proj|v_proj|o_proj/, 0x5b8def],
+  ['mlp', /mlp|ffn|feed_forward|expert|fc\d|\.ff\./, 0xe0904a],
+  ['embed/head', /embed|embd|lm_head|wte|wpe|^output\./, 0x8a8f98],
+  ['other', /./, 0xb07ad8],
+];
+const BYTES = {F64: 8, I64: 8, U64: 8, F32: 4, I32: 4, U32: 4, F16: 2, BF16: 2, I16: 2, U16: 2, F8_E4M3: 1, F8_E5M2: 1, F8_E8M0: 1, I8: 1, U8: 1, BOOL: 1, F4: 0.5, F6_E2M3: 0.75, F6_E3M2: 0.75,
+  Q4_0: 0.5625, Q4_1: 0.625, Q5_0: 0.6875, Q5_1: 0.75, Q8_0: 1.0625, Q8_1: 1.125, Q2_K: 0.328, Q3_K: 0.43, Q4_K: 0.5625, Q5_K: 0.6875, Q6_K: 0.82, Q8_K: 1.14,
+  IQ2_XXS: 0.258, IQ2_XS: 0.289, IQ3_XXS: 0.383, IQ1_S: 0.195, IQ4_NL: 0.5625, IQ3_S: 0.43, IQ2_S: 0.3125, IQ4_XS: 0.531, IQ1_M: 0.219, TQ1_0: 0.21, TQ2_0: 0.26, MXFP4: 0.53};  // gguf: bits per weight / 8
+const IS_MLP = /mlp|ffn|feed_forward|expert|\.ff\./;
+const IS_INPUT = /embed|token_embd|patch|pos_|^mtp\.fc|x_embedder|context_embedder|time_|wte|wpe|conv_in|stem/;
+const IS_VISION = /visual|vision|vit|siglip|image_encoder/;
+const IS_MTP = /(^|\.)mtp(\.|$)|nextn/;
+const WRITES = /(^|\.)(o_proj|out_proj|down_proj|fc2|linear_fc2|proj|proj_out|to_out|w2|wo|lm_head|attn_output|ffn_down|ffn_down_exps|ssm_out|output)(\.|$)/;  // write the residual stream
+
+const list = document.getElementById('list'), msg = document.getElementById('msg'), info = document.getElementById('info');
+document.getElementById('files').onchange = e => loadLocal(e.target.files);
+addEventListener('dragover', e => { e.preventDefault(); document.body.classList.add('drag'); });
+addEventListener('dragleave', e => { if (!e.relatedTarget) document.body.classList.remove('drag'); });
+addEventListener('drop', e => { e.preventDefault(); document.body.classList.remove('drag'); loadLocal(e.dataTransfer.files); });
+
+const index = await (await fetch('data/tensors/index.json')).json();
+const cur = new URLSearchParams(location.search).get('m') || index.find(r => !r.error)?.file;
+list.innerHTML = index.filter(r => !r.error).map(r => { const [pub, name] = r.id.split('/');
+  return `<a href="?m=${r.file}" class="${r.file === cur ? 'on' : ''}" title="${r.id}"><i>${r.rank}</i> <u>${pub}/</u>${name}</a>`; }).join('');
+list.querySelector('.on')?.scrollIntoView({block: 'center'});
+const qIn = document.getElementById('q'); qIn.value = localStorage.getItem('q') || '';
+qIn.oninput = e => { localStorage.setItem('q', e.target.value); const q = e.target.value.toLowerCase(); for (const a of list.children) a.hidden = !a.textContent.toLowerCase().includes(q); };
+qIn.oninput({target: qIn});
+const rec = cur === '__local' ? JSON.parse(sessionStorage.getItem('local') || '{"id": "local", "error": "local model lost, load it again"}') : await (await fetch(`data/tensors/${cur}.json`)).json();
+{ const t = document.getElementById('title'); t.textContent = rec.id; if (cur !== '__local') { t.href = `https://huggingface.co/${rec.id}`; t.title = 'open on Hugging Face'; } } document.title = `${rec.id} · 3D Model Weights`;
+if (rec.error) msg.textContent = rec.error.split('\n')[0];
+
+const numel = sh => sh.reduce((a, b) => a * b, 1);
+const fmt = n => n >= 1e9 ? (n / 1e9).toFixed(2) + 'B' : n >= 1e6 ? (n / 1e6).toFixed(1) + 'M' : n.toLocaleString();
+const side = d => Math.sqrt(d) / SQRT_DIV;
+const short = n => n.replace(/\.(weight|bias)$/, '').split('.').filter(p => p !== '*').pop().replace(/^in_proj_|_proj$|^linear_/, '');
+const common = (a, b) => { let i = 0; while (i < a.length && a[i] === b[i]) i++; return i; };
+
+// stacks = tensor name prefixes before a layer index; loose tensors join the stack with the longest shared prefix
+const stacks = new Map(), loose = [], byDtype = {};
+let hidden1d = 0, params = 0, bytes = 0;
+for (const [name, [dtype, shape, count]] of Object.entries(rec.tensors || {})) {
+  const n = numel(shape) * count, b = n * (BYTES[dtype] ?? 2);
+  params += n; bytes += b; byDtype[dtype] = (byDtype[dtype] || 0) + b;
+  if (shape.length < 2) { hidden1d += count; continue; }
+  const fused = shape.length === 3 && shape[2] > FUSED_MIN;
+  const t = {name, dtype, shape, count: fused ? count * shape[0] : count, dims: fused ? shape.slice(1) : shape}, m = name.match(/^(.*?)\.(\d+)\.(.*)$/);
+  if (!m) { loose.push(t); continue; }
+  if (!stacks.has(m[1])) stacks.set(m[1], {name: m[1], input: [], output: [], layers: new Map()});
+  const layers = stacks.get(m[1]).layers;
+  if (!layers.has(+m[2])) layers.set(+m[2], []);
+  layers.get(+m[2]).push({...t, key: m[3]});
+}
+const all = [...stacks.values()];
+let main = all.filter(s => !IS_VISION.test(s.name) && !IS_MTP.test(s.name)).sort((a, b) => b.layers.size - a.layers.size)[0] || all[0];
+for (const t of loose) {
+  const parts = t.name.split('.');
+  let best = main, n = 0;
+  for (const s of all) { const c = common(parts, s.name.split('.')); if (c > n) { n = c; best = s; } }
+  if (!best) all.push(main = best = {name: 'model', input: [], output: [], layers: new Map()});  // no layered tensors at all
+  (IS_INPUT.test(t.name) ? best.input : best.output).push(t);
+}
+
+const fmtB = b => b >= 1e12 ? (b / 1e12).toFixed(2) + ' TB' : b >= 1e9 ? (b / 1e9).toFixed(1) + ' GB' : (b / 1e6).toFixed(0) + ' MB';
+const dtypes = Object.entries(byDtype).sort((a, b) => b[1] - a[1]).filter(([, b]) => b / bytes > 0.02).map(([d, b]) => `${d} ${Math.round(b / bytes * 100)}%`);
+const experts = Math.max(0, ...Object.entries(rec.tensors || {}).filter(([n, [, sh]]) => n.includes('.*.') || IS_MLP.test(n) && sh.length === 3 && sh[2] > FUSED_MIN).map(([n, [, sh, c]]) => n.includes('.*.') ? c : sh[0]));  // compact keeps layer index, so count = experts per layer
+// derived shapes: embedding [vocab, hidden], mlp up/gate [width, hidden] in the first main layer
+const emb = main?.input.find(t => /embed_tokens|tok_embeddings|word_embeddings|wte|token_embd/.test(t.name));
+const up = main && [...main.layers.values()][0]?.find(t => /(up|gate|gate_up)_proj|fc1|w1|w3/.test(t.key));
+const share = {};
+for (const [name, [, shape, count]] of Object.entries(rec.tensors || {})) { const k = KINDS.find(k => k[1].test(name))[0]; share[k] = (share[k] || 0) + numel(shape) * count; }
+const split = Object.entries(share).sort((a, b) => b[1] - a[1]).filter(([, n]) => n / params > 0.01).map(([k, n]) => `${k} ${Math.round(n / params * 100)}%`);
+const cards = [
+  [fmt(params), 'params'], [`~${fmtB(bytes)}`, dtypes.join(' · ') || 'size'],
+  main && [main.layers.size, 'layers'], emb && [emb.shape[1].toLocaleString(), 'hidden'], emb && [emb.shape[0].toLocaleString(), 'vocab'],
+  up && [up.shape[0].toLocaleString(), up.count > 1 || up.key.includes('expert') ? 'expert width' : 'mlp width'],
+  experts >= 2 && [experts, 'experts'], split.length && [split[0], split.slice(1).join(' · ') || 'params split'],
+  [`${rec.n_files ?? 0} / ${(rec.n_tensors ?? 0).toLocaleString()}`, 'files / tensors'], rec.likes != null && [rec.likes.toLocaleString(), `likes · #${rec.rank}`],
+].filter(Boolean);
+if (rec.tensors) document.getElementById('cards').innerHTML = cards.map(([v, l]) => `<div class="card"><b>${v}</b><span>${l}</span></div>`).join('');
+
+const scene = new THREE.Scene();
+const view = document.getElementById('view');
+// layout is built top-down (input at y=0, flow toward -y); world turns it so input is left, output right
+const world = new THREE.Group(); world.rotation.z = Math.PI / 2; scene.add(world);
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
+const renderer = new THREE.WebGLRenderer({antialias: true});
+renderer.setPixelRatio(devicePixelRatio);
+view.appendChild(renderer.domElement);
+const css = new CSS2DRenderer();
+Object.assign(css.domElement.style, {position: 'absolute', top: 0, pointerEvents: 'none'});
+view.appendChild(css.domElement);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+let cullDirty = true, cullAt = 0;
+controls.addEventListener('change', () => { cullDirty = true; redraw(); });
+
+let into = world;  // group the builders add to
+let needsDraw = true; const redraw = () => needsDraw = true;  // render only when something changed
+const setEdge = (m, a) => { for (let j = m.userData.edge, e = j + 24; j < e; j++) eRGBA[j * 4 + 3] = a; outlineGeo.attributes.color.needsUpdate = true; };
+const labels = [];  // [el, priority]: io, then groups, then tensor names
+const label = (text, x, y, z, cls = 'lbl') => {
+  const d = document.createElement('div'); d.className = cls; d.textContent = text;
+  const o = new CSS2DObject(d); o.position.set(x, y, z); into.add(o);
+  labels.push([d, {io: 0, grp: 1}[cls] ?? 2]);
+};
+const cull = () => {  // hide labels that overlap one already shown
+  const kept = [];
+  for (const [d] of labels) {
+    const r = d.getBoundingClientRect();
+    const hit = r.width && kept.some(k => r.left < k.right && r.right > k.left && r.top < k.bottom && r.bottom > k.top);
+    d.style.visibility = hit ? 'hidden' : '';
+    if (r.width && !hit) kept.push(r);
+  }
+};
+const arrow = (from, to, color = 0x9aa0a8) => {
+  const dir = to.clone().sub(from), len = dir.length();
+  world.add(new THREE.ArrowHelper(dir.normalize(), from, len, color, 1.5, 0.8));
+};
+
+const meshes = [], box = new THREE.BoxGeometry(1, 1, 1), edges = new THREE.EdgesGeometry(box);
+const pos = {};  // pos[stack][step] = {in: [mesh], out: [mesh]}; steps: input 0, layer k mixer 2k+1, mlp 2k+2, output last
+const slab = (t, x, y) => {  // matrix [out, in...]: in along x, out along z
+  const w = side(numel(t.dims.slice(1))), d = side(t.dims[0]);
+  const color = KINDS.find(k => k[1].test(t.name))[2];
+  const mesh = new THREE.Mesh(box, new THREE.MeshBasicMaterial({color, transparent: true, opacity: OPACITY.base}));
+  mesh.scale.set(w, THICK, d); mesh.position.set(x + w / 2, y, 0);
+  mesh.userData = t; into.add(mesh); meshes.push(mesh);
+  ((pos[t.stack] ??= {})[t.step] ??= {in: [], out: []})[t.io].push(mesh);
+  return {w, d};
+};
+const row = (list, x0, y, labelIt, stack, step, inLayer, maxW = Infinity) => {  // slabs left to right, mlp block after a wider gap
+  let x = x0, prevMlp = null, rw = 0, y0 = y;
+  for (const t of list) {
+    const tw = side(numel(t.dims.slice(1)));
+    if (x > x0 && x - x0 + tw > maxW) { rw = Math.max(rw, x - x0); x = x0; y -= WRAP_GAP; }
+    const isMlp = inLayer && IS_MLP.test(t.key);
+    if (prevMlp === false && isMlp) x += BLOCK_GAP - COL_GAP;
+    Object.assign(t, {stack, step: step + (isMlp ? 1 : 0), io: step === 0 || WRITES.test(t.key || t.name) ? 'out' : 'in'});
+    const {w, d} = slab(t, x, y);
+    const text = short(t.key || t.name) + (t.count > 1 ? ` ×${t.count}` : '');
+    if (labelIt && !labelIt.has(text)) { labelIt.add(text); label(text, x + w / 2, y, d / 2 + 1); }
+    x += w + COL_GAP; prevMlp = isMlp;
+  }
+  row.h = y0 - y;
+  return Math.max(rw, x - x0);
+};
+const rowW = list => list.reduce((w, t) => w + side(numel(t.dims.slice(1))) + COL_GAP, 0) + BLOCK_GAP;
+const aspect = view.clientWidth / view.clientHeight;
+const mainW = main ? Math.max(rowW(main.input), rowW(main.output), ...[...main.layers.values()].map(rowW)) : 0;
+const layerGap = Math.min(LAYER_GAP[1], Math.max(LAYER_GAP[0], (aspect * mainW - 2 * STACK_GAP) / Math.max((main?.layers.size || 1) - 1, 1)));
+
+// one stack top-down in its own group: input on top (y=0), output at the bottom; place() moves the group
+const build = s => {
+  into = new THREE.Group(); world.add(into);
+  const idx = [...s.layers.keys()].sort((a, b) => a - b), lastStep = 2 * idx.length + 1, lw = Math.max(40, ...[...s.layers.values()].map(rowW));
+  const names = new Set();  // a tensor name is labeled once per stack
+  let y = 0, w = 0;
+  if (s.input.length) { w = row(s.input, 0, y, names, s.name, 0, false, lw); y -= row.h + STACK_GAP; }
+  const firstY = y, seen = new Set();
+  idx.forEach((i, k) => {
+    const list = s.layers.get(i), sig = list.map(t => t.key).join();
+    const labelIt = !seen.has(sig) && seen.size < LABELED_TYPES && names;
+    w = Math.max(w, row(list, 0, y, labelIt, s.name, 2 * k + 1, true));
+    seen.add(sig);
+    if (k % LABEL_EVERY === 0 || k === idx.length - 1) label(`L${i}`, -2.5, y, 0, 'grp');
+    y -= layerGap;
+  });
+  const lastY = idx.length ? y + layerGap : y;
+  if (idx.length) label(`${s.name.split('.').pop()} · ${idx.length}`, -2.5, (firstY + lastY) / 2, 0, 'grp');
+  let bottom = lastY;
+  if (s.output.length) { bottom = lastY - STACK_GAP; w = Math.max(w, row(s.output, 0, bottom, names, s.name, lastStep, false, lw)); bottom -= row.h; }
+  const g = into; into = world;
+  return {g, h: -bottom, w, place(x0, top) { g.position.set(x0, top, 0); Object.assign(this, {x0, top, bottom: top + bottom}); return this; }};
+};
+
+// layout along the flow: vision stacks upstream of main, mtp downstream; the rest in bands beside it, each band about as long as main
+const placed = new Map(), built = new Map(all.map(s => [s, build(s)]));
+const M = main && built.get(main).place(0, 0);
+if (M) placed.set(main, M);
+let upY = STACK_GAP * 2, downY = M ? M.bottom - STACK_GAP * 2 : 0;
+for (const s of all.filter(s => s !== main && IS_VISION.test(s.name))) { const b = built.get(s); placed.set(s, b.place(0, upY + b.h)); upY += b.h + STACK_GAP * 2; }
+for (const s of all.filter(s => s !== main && IS_MTP.test(s.name))) { const b = built.get(s); placed.set(s, b.place(0, downY)); downY -= b.h + STACK_GAP * 2; }
+const colTop = Math.max(0, ...[...placed.values()].map(p => p.top)), colLen = Math.max(colTop - downY, 100);
+let bandX = Math.max(0, ...[...placed.values()].map(p => p.w)) + SIDE_GAP, bandW = 0, yc = colTop;
+for (const s of all.filter(s => !placed.has(s))) {
+  const b = built.get(s);
+  if (yc < colTop && colTop - yc + b.h > colLen) { bandX += bandW + SIDE_GAP; bandW = 0; yc = colTop; }
+  placed.set(s, b.place(bandX, yc)); yc -= b.h + STACK_GAP * 2; bandW = Math.max(bandW, b.w);
+}
+
+if (M) {
+  label('input', M.x0 - 6, M.top + 4, 0, 'io');
+  arrow(new THREE.Vector3(M.x0 - 6, M.top + 3, 0), new THREE.Vector3(M.x0 - 1, M.top + 0.5, 0));
+  label('output', M.x0 - 6, M.bottom - 4, 0, 'io');
+  arrow(new THREE.Vector3(M.x0 - 1, M.bottom - 0.5, 0), new THREE.Vector3(M.x0 - 6, M.bottom - 3, 0));
+  for (const [s, p] of placed) if (IS_VISION.test(s.name) && s !== main) label('image', p.x0 - 6, p.top + 4, 0, 'io');
+}
+
+// selection traces: same subcomponent across layers (spine) + residual-stream neighbours (flow)
+const traces = new THREE.Group(); scene.add(traces);  // world coordinates, stacks live in moved groups
+const selected = new Set(), skey = t => `${t.stack}|${t.key || t.name}`;
+const nearest = (stack, step, dir, io) => {  // closest step before/after that has readers/writers
+  const last = Math.max(...Object.keys(pos[stack]).map(Number));
+  for (let s = step + dir; s >= 0 && s <= last; s += dir) if (pos[stack][s]?.[io].length) return pos[stack][s][io];
+  return [];
+};
+const center = mesh => mesh.getWorldPosition(new THREE.Vector3());
+const lineMats = [];
+const lines = (pairs, color, opacity, linewidth) => {
+  if (!pairs.length) return;
+  const g = new LineSegmentsGeometry().setPositions(pairs.flatMap(([a, b]) => [...center(a).toArray(), ...center(b).toArray()]));
+  const mat = new LineMaterial({color, transparent: true, opacity, linewidth}); mat.resolution.set(view.clientWidth, view.clientHeight); lineMats.push(mat);
+  traces.add(new LineSegments2(g, mat));
+};
+const refresh = (scroll = true) => {
+  redraw();
+  traces.clear(); lineMats.length = 0;
+  const sel = meshes.filter(m => selected.has(skey(m.userData)));
+  for (const m of meshes) {
+    const on = selected.has(skey(m.userData));
+    m.material.opacity = !selected.size ? OPACITY.base : on ? OPACITY.sel : OPACITY.dim;
+    setEdge(m, !selected.size || on ? 0.75 : 0.12);
+  }
+  const spine = [], flow = [];
+  const byKey = Map.groupBy(sel, m => skey(m.userData));
+  for (const list of byKey.values()) list.sort((a, b) => a.userData.step - b.userData.step).forEach((m, i) => i && spine.push([list[i - 1], m]));
+  for (const m of sel) {
+    const {stack, step, io} = m.userData, here = pos[stack][step];
+    if (io === 'in') {
+      nearest(stack, step, -1, 'out').forEach(w => flow.push([w, m]));
+      here.out.forEach(w => flow.push([m, w]));
+    } else {
+      here.in.forEach(r => flow.push([r, m]));
+      nearest(stack, step, 1, 'in').forEach(r => flow.push([m, r]));
+    }
+  }
+  for (const [a, b] of flow) for (const n of [a, b]) if (!selected.has(skey(n.userData))) n.material.opacity = 0.35;
+  lines(flow, 0x9fd3ff, 0.45, TRACE_PX.flow);
+  lines(spine, 0xffffff, 0.9, TRACE_PX.spine);
+  const names = [...byKey.keys()].map(k => short(k.split('|')[1]));
+  for (const r of rows.children) r.classList.toggle('on', selected.has(r.dataset.k));
+  if (scroll) rows.querySelector('.on')?.scrollIntoView({block: 'nearest'});
+  legendEl.innerHTML = selected.size ? `selected: ${names.slice(0, 5).join(', ')}${names.length > 5 ? ` +${names.length - 5}` : ''} · esc clears` : legendHTML;
+};
+
+const legendEl = document.getElementById('legend');
+const legendHTML = KINDS.map(([l, , c]) => `<span><i class="k" style="background:#${c.toString(16).padStart(6, '0')}"></i>${l}</span>`).join(' ')
+  + ` · ${rec.n_tensors ?? 0} tensors, ${fmt(params)} params · ${hidden1d} 1D hidden · side ∝ √dim · click selects, shift adds`;
+legendEl.innerHTML = legendHTML;
+
+const bounds = new THREE.Box3();
+world.updateMatrixWorld(true);
+// all slab outlines in one draw call: edge vertices baked to world space, per-vertex RGBA so each slab keeps its own opacity
+const ePos = edges.attributes.position, nE = ePos.count, eXYZ = new Float32Array(meshes.length * nE * 3), eRGBA = new Float32Array(meshes.length * nE * 4), v = new THREE.Vector3();
+meshes.forEach((m, i) => {
+  m.userData.edge = i * nE;
+  for (let j = 0; j < nE; j++) {
+    v.fromBufferAttribute(ePos, j).applyMatrix4(m.matrixWorld).toArray(eXYZ, (i * nE + j) * 3);
+    m.material.color.toArray(eRGBA, (i * nE + j) * 4); eRGBA[(i * nE + j) * 4 + 3] = 0.75;
+  }
+});
+const outlineGeo = new THREE.BufferGeometry();
+outlineGeo.setAttribute('position', new THREE.BufferAttribute(eXYZ, 3));
+outlineGeo.setAttribute('color', new THREE.BufferAttribute(eRGBA, 4));
+scene.add(new THREE.LineSegments(outlineGeo, new THREE.LineBasicMaterial({vertexColors: true, transparent: true})));
+for (const m of meshes) bounds.expandByObject(m);
+const c = bounds.getCenter(new THREE.Vector3()), sz = bounds.getSize(new THREE.Vector3());
+const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)), dist = FIT * Math.max(sz.y / 2 / tanV, sz.x / 2 / (tanV * aspect)) + sz.z / 2 || 50;
+controls.target.copy(c);
+{ // soft reference grid on a plane behind the model (GridHelper is XZ: turn it to XY)
+  const n = Math.max(sz.x, sz.y) * 1.4 || 50, g = new THREE.GridHelper(n, GRID.cells, GRID.major, GRID.color);
+  g.rotation.x = Math.PI / 2; g.position.set(c.x, c.y, bounds.min.z - 2); scene.add(g);
+}
+camera.position.copy(c).add(new THREE.Vector3(-0.25, 0.2, 1).normalize().multiplyScalar(dist));
+
+const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();
+const hitAt = e => {
+  const r = renderer.domElement.getBoundingClientRect();
+  mouse.set((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1);
+  ray.setFromCamera(mouse, camera);
+  return ray.intersectObjects(meshes, false)[0]?.object || null;
+};
+let hot = null, down = null;
+let moved = null;  // last pointermove, handled once per frame
+renderer.domElement.addEventListener('pointermove', e => moved = e);
+const hover = e => {
+  const hit = hitAt(e);
+  if (hit === hot) return;
+  redraw();
+  if (hot && !selected.size) hot.material.opacity = OPACITY.base;
+  hot = hit;
+  if (!hot) return;
+  if (!selected.size) hot.material.opacity = OPACITY.hot;
+  const t = hot.userData;
+  if (!card.classList.contains('pin')) layerCard(t.name);
+  info.textContent = `${t.name}${t.count > 1 ? ` (×${t.count})` : ''}  [${t.shape.join(' × ')}]  out × in  ${t.dtype}  ${fmt(numel(t.shape) * t.count)}`;
+};
+renderer.domElement.addEventListener('pointerdown', e => down = [e.clientX, e.clientY]);
+renderer.domElement.addEventListener('pointerup', e => {
+  if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 4) return;  // was an orbit drag
+  const hit = hitAt(e);
+  if (!e.shiftKey) { const k = hit && skey(hit.userData), had = selected.has(k) && selected.size === 1; selected.clear(); if (hit && !had) selected.add(k); }
+  else if (hit) { const k = skey(hit.userData); selected.has(k) ? selected.delete(k) : selected.add(k); }
+  const pin = !!hit && selected.has(skey(hit.userData));  // click pins the card opaque; hover alone shows it faint
+  card.classList.toggle('pin', pin); why.classList.toggle('pin', pin);
+  if (pin) layerCard(hit.userData.name); else if (!hit) card.hidden = why.hidden = true;
+  refresh();
+});
+// layer card: every tensor of the hovered layer (1D included) with shape, dtype, params and share of the layer
+const card = document.getElementById('card'), why = document.getElementById('why'), hintBtn = document.getElementById('hint');
+const setHint = on => { view.classList.toggle('nohint', !on); hintBtn.textContent = on ? 'hide hint' : 'show hint'; localStorage.setItem('hint', on ? '1' : '0'); };
+setHint(localStorage.getItem('hint') !== '0'); hintBtn.onclick = () => setHint(view.classList.contains('nohint'));
+const tabs = [['tabL', 'noside', '‹', '›'], ['tabR', 'noraw', '›', '‹']];  // [button, body class when collapsed, glyph open, glyph closed]
+const setTab = ([id, cls, open, shut], on, save) => { document.body.classList.toggle(cls, !on); document.getElementById(id).textContent = on ? open : shut; if (save) localStorage.setItem('pane-' + cls, on ? '0' : '1'); };
+for (const t of tabs) { setTab(t, !document.body.classList.contains(t[1])); document.getElementById(t[0]).onclick = () => { setTab(t, document.body.classList.contains(t[1]), true); dispatchEvent(new Event('resize')); }; }
+const detBtn = document.getElementById('det');
+const setDet = on => { view.classList.toggle('nodet', !on); detBtn.textContent = on ? 'hide details' : 'show details'; localStorage.setItem('details', on ? '1' : '0'); };
+setDet(localStorage.getItem('details') === '1'); detBtn.onclick = () => setDet(view.classList.contains('nodet'));
+const LAYER_TYPES = [  // [label, test on the layer's tensor names, one-line tentative explanation]; first match wins
+  ['linear attn + MoE', k => /linear_attn/.test(k) && /expert|\.moe|router|_exps/.test(k), 'Running-summary attention followed by routed experts, for long contexts at low cost.'],
+  ['linear attn + MLP', k => /linear_attn/.test(k), 'A cheaper attention that keeps a running summary instead of comparing every pair of tokens, then a feed-forward network.'],
+  ['mamba/SSM', k => /mamba|ssm|A_log|conv1d|mixer\.(in|out)_proj/.test(k), 'A state-space layer that carries a compressed memory of the sequence, read in one pass like an RNN.'],
+  ['cross+self attn', k => /cross_attn|encoder_attn|attn2/.test(k), 'Tokens attend to each other and also to an outside signal, like a text prompt guiding an image or audio.'],
+  ['attention + MoE', k => /attn|attention|q_proj|qkv|to_q/.test(k) && /expert|\.moe|router|_exps/.test(k), 'Attention mixes the tokens, then a router sends each token to a few of many expert networks, so only part of the weights run per token.'],
+  ['attention + MLP', k => /attn|attention|q_proj|qkv|to_q/.test(k) && /mlp|ffn|feed_forward|fc\d|\.ff\./.test(k), 'Each token looks at the other tokens, then a feed-forward network transforms each one on its own.'],
+  ['attention, no MLP', k => /attn|attention|q_proj|qkv|to_q/.test(k), 'Attention only; the transform step is elsewhere or named differently.'],
+  ['conv/resnet', k => /conv|resnet/.test(k), 'Convolutions that mix nearby pixels or samples, typical of image and audio encoders and decoders.'],
+  ['unclassified', () => true, 'Layer type not recognized from its tensor names.'],
+];
+const layerCard = name => {
+  const m = name.match(/^(.*?\.\d+)\./);
+  if (!m) { card.hidden = why.hidden = true; return; }
+  const ts = Object.entries(rec.tensors).filter(([n]) => n.startsWith(m[1] + '.')).map(([n, [dtype, shape, count]]) => ({n, key: n.slice(m[1].length + 1), dtype, shape, count, p: numel(shape) * count, b: numel(shape) * count * (BYTES[dtype] ?? 2)}));
+  const P = ts.reduce((a, t) => a + t.p, 0), B = ts.reduce((a, t) => a + t.b, 0);
+  card.innerHTML = `<div class="h">${m[1]} <i>· ${ts.length} tensors · ${fmt(P)} params · ${(B / 2 ** 20).toFixed(1)} MiB · ${(P / params * 100).toFixed(2)}% of model</i></div><table>`
+    + ts.map(t => `<tr class="${t.n === name ? 'on' : ''}"><td>${t.key}${t.count > 1 ? ` ×${t.count}` : ''}</td><td>${t.shape.join('×')}</td><td>${t.dtype}</td><td>${fmt(t.p)}</td><td>${(t.p / P * 100).toFixed(1)}%</td></tr>`).join('') + '</table>';
+  const [lt, , text] = LAYER_TYPES.find(([, f]) => f(ts.map(t => t.key).join(' ')));
+  why.innerHTML = `<b>${lt}</b> · ${text}`; card.hidden = why.hidden = false;
+};
+// raw panel: grouped by stack, per-layer tensors collapsed to one row per subcomponent; click a row to select it in 3D
+const rows = document.getElementById('rows'), byName = new Map(meshes.map(m => [m.userData.name, skey(m.userData)])), drawn = new Set(byName.values());
+const ranges = ix => ix.sort((a, b) => a - b).reduce((r, i) => { const l = r.at(-1); l && i === l[1] + 1 ? l[1] = i : r.push([i, i]); return r; }, [])
+  .map(([a, b]) => a === b ? a : `${a}–${b}`).join(',');
+const groups = new Map();  // stack -> key|shape -> {key, k, dtype, shape, count, layers}
+for (const [name, [dtype, shape, count]] of Object.entries(rec.tensors || {})) {
+  const m = name.match(/^(.*?)\.(\d+)\.(.*)$/), stack = m ? m[1] : byName.get(name)?.split('|')[0] ?? 'other', key = m ? m[3] : name;
+  if (!groups.has(stack)) groups.set(stack, new Map());
+  const g = groups.get(stack), id = key + shape.join();
+  if (!g.has(id)) g.set(id, {key, k: `${stack}|${m ? key : name}`, dtype, shape, count, layers: []});
+  if (m) g.get(id).layers.push(+m[2]);
+}
+const kindOf = n => KINDS.findIndex(k => k[1].test(n));
+const hl = key => key.split('.').map((p, i, a) => p === '*' ? '<u>*</u>' : i === a.length - 1 && /^(weight|bias|scale)$/.test(p) ? `<u>${p}</u>` : i < a.length - 1 ? `<em>${p}</em>` : p).join('<u>.</u>');
+rows.innerHTML = [...groups].map(([stack, g]) => {
+  const list = [...g.values()].sort((a, b) => (a.shape.length < 2) - (b.shape.length < 2) || kindOf(a.key) - kindOf(b.key) || a.key.localeCompare(b.key));
+  const nl = new Set(list.flatMap(t => t.layers)).size;
+  return `<div class="h" data-s="${stack}">${stack}${nl ? ` <i>· ${nl} layers</i>` : ''}</div>` + list.map((t, i) => {
+    const c = KINDS[kindOf(stack + '.' + t.key)][2].toString(16).padStart(6, '0'), on = drawn.has(t.k);
+    const L = t.layers.length && t.layers.length < nl ? ` L${ranges(t.layers)}` : '';
+    return `<div data-k="${t.k}" class="${on ? '' : 'd1'}${i % 2 ? ' z' : ''}" title="${stack}.${t.key}" style="border-left:2px solid #${c}${on ? '' : '55'}">${hl(t.key)} <b>[${t.shape.join('×')}] ${t.dtype}${t.count > 1 ? ' ×' + t.count : ''}${L}</b></div>`;
+  }).join('');
+}).join('');
+let preview = null;  // hovered row or stack header lights its subcomponents in 3D
+rows.onmouseover = e => {
+  const r = e.target.closest('#rows > div'), id = r?.dataset.k || r?.dataset.s || null;
+  if (id === preview) return;
+  preview = id; refresh(false);
+  if (!id) return;
+  for (const m of meshes) if (r.dataset.k ? skey(m.userData) === id : m.userData.stack === id) { m.material.opacity = OPACITY.hot; setEdge(m, 1); }
+  redraw();
+};
+rows.onmouseleave = () => { preview = null; refresh(false); };
+rows.onclick = e => {
+  const k = e.target.closest('div[data-k]')?.dataset.k;
+  if (!drawn.has(k)) return;
+  if (!e.shiftKey) selected.clear();
+  selected.has(k) && e.shiftKey ? selected.delete(k) : selected.add(k);
+  refresh();
+};
+const rqIn = document.getElementById('rq'); rqIn.value = localStorage.getItem('rq') || '';
+rqIn.oninput = e => { localStorage.setItem('rq', e.target.value); const q = e.target.value.toLowerCase(); for (const r of rows.children) r.hidden = !!q && !r.title.toLowerCase().includes(q); };
+rqIn.oninput({target: rqIn});
+
+addEventListener('keydown', e => { if (e.key === 'Escape') { selected.clear(); card.hidden = why.hidden = true; card.classList.remove('pin'); why.classList.remove('pin'); refresh(); } });
+
+const resize = () => {
+  const w = view.clientWidth, h = view.clientHeight;
+  camera.aspect = w / h; camera.updateProjectionMatrix();
+  renderer.setSize(w, h); css.setSize(w, h); for (const m of lineMats) m.resolution.set(w, h);
+};
+addEventListener('resize', () => { resize(); cullDirty = true; redraw(); }); resize();
+renderer.setAnimationLoop(t => {
+  if (moved) { hover(moved); moved = null; }
+  controls.update();
+  if (needsDraw) { needsDraw = false; renderer.render(scene, camera); css.render(scene, camera); }
+  if (cullDirty && t - cullAt > LABEL_CULL_MS) { cullDirty = false; cullAt = t; cull(); }
+});

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Static GitHub Pages site: `index.html` (three.js from a CDN) renders `data/tensors/<publisher>__<model>.json`, listed in `data/tensors/index.json`.
+Static GitHub Pages site: `index.html` (markup), `style.css`, `viewer.js` (three.js from a CDN) renders `data/tensors/<publisher>__<model>.json`, listed in `data/tensors/index.json`. `load_local.js` reads the headers of local .safetensors / .gguf files in the browser for "Load a custom model".
 
 `fetch_tensors.py` builds that data from the safetensors headers of the models in the hf-top-models ranking (`MODELS_URL`). Constants at the top. Rerunning only fetches missing repos; delete a model's json to refetch it.
 

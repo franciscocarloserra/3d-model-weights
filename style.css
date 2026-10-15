@@ -1,0 +1,47 @@
+html,body{margin:0;height:100%;background:#0d0f12;color:#c8ccd2;font:13px system-ui,sans-serif;overflow:hidden}
+body{--L:230px;--R:340px} body.noside{--L:0px} body.noraw{--R:0px} body.noside #side,body.noraw #raw{display:none}
+.tab{position:fixed;top:50%;z-index:4;width:14px;height:40px;margin-top:-20px;padding:0;background:#121418;color:#8a8f98;border:1px solid #2a2f38;font:12px system-ui;cursor:pointer} .tab:hover{color:#fff}
+#tabL{left:var(--L);border-radius:0 4px 4px 0;border-left:0} #tabR{right:var(--R);border-radius:4px 0 0 4px;border-right:0}
+header{position:fixed;top:0;left:var(--L);right:var(--R);height:64px;z-index:2;padding:0 14px;box-sizing:border-box;border-bottom:1px solid #1f232a;display:flex;align-items:center;gap:14px}
+h1{margin:0;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;max-width:40%}
+#title{color:inherit;text-decoration:none} #title[href]:hover{text-decoration:underline}
+#msg{color:#8a8f98;font-size:12px;margin-left:10px}
+#cards{display:flex;gap:6px;overflow-x:auto;flex:1;min-width:0}
+.card{background:#15181d;border:1px solid #1f232a;border-radius:4px;padding:4px 9px;white-space:nowrap}
+.card b{display:block;font-size:14px;font-weight:500;color:#e6e9ee} .card span{font-size:10px;color:#8a8f98}
+#side{position:fixed;top:0;left:0;bottom:31px;width:230px;z-index:2;overflow-y:auto;background:#121418;border-right:1px solid #1f232a}
+#side #brand{display:flex;align-items:center;gap:10px;padding:12px 10px 4px;color:#fff;font-size:18px;font-weight:700;line-height:1.15;white-space:normal}
+#brand img{width:48px;height:48px;border-radius:8px}
+#side .from{display:block;padding:0 10px 4px 68px;color:#8a8f98;font-size:11px;text-decoration:none} #side .from:hover{color:#c8ccd2}
+#side #load{display:block;margin:8px 10px 0;padding:4px 6px;border:1px dashed #2f4a6a;border-radius:3px;color:#9fd3ff;font-size:12px;text-align:center;cursor:pointer} #side #load:hover{background:#1b1f26}
+body.drag #view{outline:2px dashed #9fd3ff;outline-offset:-6px}
+#note{margin:10px;color:#5d636c;font-size:10px;line-height:1.4}
+[hidden]{display:none!important} input{box-sizing:border-box}
+#side input{width:calc(100% - 20px);margin:8px 10px;background:#0d0f12;color:#c8ccd2;border:1px solid #2a2f38;border-radius:3px;padding:4px 6px}
+#side a{display:block;padding:3px 10px;color:#c8ccd2;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
+#side a:hover{background:#1b1f26} #side a.on{background:#24364d;color:#fff} #side a.off{color:#555b63}
+#view{position:fixed;left:var(--L);right:var(--R);top:64px;bottom:31px}
+#raw{position:fixed;top:0;right:0;bottom:31px;width:340px;z-index:2;display:flex;flex-direction:column;background:#121418;border-left:1px solid #1f232a;font:11px ui-monospace,monospace}
+#raw input{margin:8px 10px;background:#0d0f12;color:#c8ccd2;border:1px solid #2a2f38;border-radius:3px;padding:4px 6px;font:12px system-ui}
+#rows{overflow-y:auto;flex:1}
+#rows div{padding:1px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+:where(#list) a:nth-child(even),:where(#rows) div.z{background:#16191e}
+#rows div:hover{background:#1b1f26} #rows div.on{background:#24364d;color:#fff} #rows div.d1{opacity:.45;cursor:default}
+#rows div.h{margin-top:8px;padding:3px 10px;color:#e6e9ee;font:600 11px system-ui;cursor:default;border-bottom:1px solid #1f232a}
+#rows div.h:hover{background:none} #rows div.h i{font-style:normal;font-weight:400;color:#6b717a}
+#rows b{font-weight:normal;color:#8a8f98} #rows u{text-decoration:none;color:#6b717a} #rows em{font-style:normal;color:#9aa7b4}
+#side a i{font-style:normal;color:#5d636c} #side a u{text-decoration:none;color:#8a8f98}
+#bar{position:fixed;bottom:0;left:0;right:0;z-index:2;padding:6px 14px;background:#15181dcc;display:flex;gap:18px;white-space:nowrap}
+#info{flex:1;overflow:hidden;text-overflow:ellipsis}
+.k{display:inline-block;width:9px;height:9px;margin-right:4px;border-radius:2px}
+.lbl{font-size:11px;color:#c8ccd2;pointer-events:none;white-space:nowrap}
+.io{font-size:13px;font-weight:600;color:#fff;background:#2a2f38;padding:2px 6px;border-radius:3px}
+#card{position:absolute;top:36px;left:8px;z-index:3;max-height:calc(100% - 44px);overflow:auto;pointer-events:none;background:#121418;border:1px solid #1f232a;opacity:.55;border-radius:4px;padding:6px 8px;font:11px ui-monospace,monospace;color:#c8ccd2}
+#why{position:absolute;right:8px;bottom:36px;z-index:3;max-width:360px;pointer-events:none;background:#121418;border:1px solid #1f232a;border-radius:4px;padding:6px 8px;font:12px system-ui;color:#c8ccd2;opacity:.55} #why b{color:#fff;font-weight:600}
+#hint,#det{position:absolute;right:8px;bottom:8px;z-index:3;background:#121418;color:#8a8f98;border:1px solid #2a2f38;border-radius:3px;padding:2px 8px;font:11px system-ui;cursor:pointer} #det{right:auto;bottom:auto;left:8px;top:8px} #hint:hover,#det:hover{color:#c8ccd2}
+#view.nohint #why,#view.nodet #card{display:none}
+#why.pin{opacity:1;border-color:#2f4a6a}
+#card.pin{opacity:1;border-color:#2f4a6a}
+#card .h{font:600 11px system-ui;color:#e6e9ee;margin-bottom:4px} #card .h i{font-style:normal;font-weight:400;color:#8a8f98}
+#card td{padding:0 10px 0 0;white-space:nowrap} #card td+td{color:#8a8f98} #card tr.on td{color:#fff;background:#24364d}
+.grp{font-size:12px;color:#8a8f98}
