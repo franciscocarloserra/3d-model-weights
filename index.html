@@ -2,7 +2,10 @@
 <html><head><meta charset="utf-8"><title>3D Model Weights</title>
 <style>
  html,body{margin:0;height:100%;background:#0d0f12;color:#c8ccd2;font:13px system-ui,sans-serif;overflow:hidden}
- header{position:fixed;top:0;left:230px;right:340px;height:64px;z-index:2;padding:0 14px;box-sizing:border-box;border-bottom:1px solid #1f232a;display:flex;align-items:center;gap:14px}
+ body{--L:230px;--R:340px} body.noside{--L:0px} body.noraw{--R:0px} body.noside #side,body.noraw #raw{display:none}
+ .tab{position:fixed;top:50%;z-index:4;width:14px;height:40px;margin-top:-20px;padding:0;background:#121418;color:#8a8f98;border:1px solid #2a2f38;font:12px system-ui;cursor:pointer} .tab:hover{color:#fff}
+ #tabL{left:var(--L);border-radius:0 4px 4px 0;border-left:0} #tabR{right:var(--R);border-radius:4px 0 0 4px;border-right:0}
+ header{position:fixed;top:0;left:var(--L);right:var(--R);height:64px;z-index:2;padding:0 14px;box-sizing:border-box;border-bottom:1px solid #1f232a;display:flex;align-items:center;gap:14px}
  h1{margin:0;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;max-width:40%}
  #msg{color:#8a8f98;font-size:12px;margin-left:10px}
  #cards{display:flex;gap:6px;overflow-x:auto;flex:1;min-width:0}
@@ -17,7 +20,7 @@
  #side input{width:calc(100% - 20px);margin:8px 10px;background:#0d0f12;color:#c8ccd2;border:1px solid #2a2f38;border-radius:3px;padding:4px 6px}
  #side a{display:block;padding:3px 10px;color:#c8ccd2;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
  #side a:hover{background:#1b1f26} #side a.on{background:#24364d;color:#fff} #side a.off{color:#555b63}
- #view{position:fixed;left:230px;right:340px;top:64px;bottom:31px}
+ #view{position:fixed;left:var(--L);right:var(--R);top:64px;bottom:31px}
  #raw{position:fixed;top:0;right:0;bottom:31px;width:340px;z-index:2;display:flex;flex-direction:column;background:#121418;border-left:1px solid #1f232a;font:11px ui-monospace,monospace}
  #raw input{margin:8px 10px;background:#0d0f12;color:#c8ccd2;border:1px solid #2a2f38;border-radius:3px;padding:4px 6px;font:12px system-ui}
  #rows{overflow-y:auto;flex:1}
@@ -33,14 +36,23 @@
  .k{display:inline-block;width:9px;height:9px;margin-right:4px;border-radius:2px}
  .lbl{font-size:11px;color:#c8ccd2;pointer-events:none;white-space:nowrap}
  .io{font-size:13px;font-weight:600;color:#fff;background:#2a2f38;padding:2px 6px;border-radius:3px}
+ #card{position:absolute;top:36px;left:8px;z-index:3;max-height:calc(100% - 44px);overflow:auto;pointer-events:none;background:#121418;border:1px solid #1f232a;opacity:.55;border-radius:4px;padding:6px 8px;font:11px ui-monospace,monospace;color:#c8ccd2}
+ #why{position:absolute;right:8px;bottom:36px;z-index:3;max-width:360px;pointer-events:none;background:#121418;border:1px solid #1f232a;border-radius:4px;padding:6px 8px;font:12px system-ui;color:#c8ccd2;opacity:.55} #why b{color:#fff;font-weight:600}
+ #hint,#det{position:absolute;right:8px;bottom:8px;z-index:3;background:#121418;color:#8a8f98;border:1px solid #2a2f38;border-radius:3px;padding:2px 8px;font:11px system-ui;cursor:pointer} #det{right:auto;bottom:auto;left:8px;top:8px} #hint:hover,#det:hover{color:#c8ccd2}
+ #view.nohint #why,#view.nodet #card{display:none}
+ #why.pin{opacity:1;border-color:#2f4a6a}
+ #card.pin{opacity:1;border-color:#2f4a6a}
+ #card .h{font:600 11px system-ui;color:#e6e9ee;margin-bottom:4px} #card .h i{font-style:normal;font-weight:400;color:#8a8f98}
+ #card td{padding:0 10px 0 0;white-space:nowrap} #card td+td{color:#8a8f98} #card tr.on td{color:#fff;background:#24364d}
  .grp{font-size:12px;color:#8a8f98}
 </style>
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 </head><body>
 <nav id="side"><a id="brand" href="?"><img src="logo.png" alt="">3D Model Weights</a><a class="from" href="https://franciscocarloserra.github.io/hf-top-models/">top 300 by likes ↗</a><a class="from" href="https://github.com/franciscocarloserra/3d-model-weights">source on GitHub ↗</a><a class="from" href="https://x.com/francarloerra">@francarloerra on X ↗</a><input id="q" autocomplete="off" placeholder="filter"><div id="list"></div><p id="note">Tensor names and shapes belong to the original model owners, under each model's license. No weights included. MIT code.</p></nav>
 <header><h1><span id="title"></span><span id="msg"></span></h1><div id="cards"></div></header>
-<div id="view"></div>
+<div id="view"><div id="card" hidden></div><div id="why" hidden></div><button id="hint">hide hint</button><button id="det">hide details</button></div>
 <aside id="raw"><input id="rq" autocomplete="off" placeholder="filter tensors"><div id="rows"></div></aside>
+<button class="tab" id="tabL"></button><button class="tab" id="tabR"></button>
 <div id="bar"><span id="info">hover a tensor</span><span id="legend"></span></div>
 <script>
 // dev telemetry: errors and long tasks -> POST /log
@@ -53,8 +65,12 @@ try { new PerformanceObserver(l => l.getEntries().forEach(e => e.duration > 200 
 </script>
 <script type="module">
 import * as THREE from 'three';
+for (const c of ['noside', 'noraw']) document.body.classList.toggle(c, localStorage.getItem(c) === '1');  // before layout reads the view size
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
+import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 
 const SQRT_DIV = 16;     // side = sqrt(dim) / SQRT_DIV: keeps order of sizes, tames the vocab-sized embeddings
 const LAYER_GAP = [0.5, 6]; // min/max distance between layers; picked so the model's length fits the viewer's aspect
@@ -70,6 +86,7 @@ const LABEL_CULL_MS = 150; // hide overlapping labels at most this often while t
 const LABEL_EVERY = 8;   // layer index label every N layers
 const LABELED_TYPES = 3; // per stack, label the first N distinct layer types
 const THICK = 0.06;
+const TRACE_PX = {flow: 2, spine: 3};  // selection trace widths in pixels
 const OPACITY = {base: 0.22, hot: 0.8, sel: 0.85, dim: 0.05};
 const KINDS = [          // first match wins
   ['linear attn', /linear_attn/, 0x3fb8a8],
@@ -274,14 +291,16 @@ const nearest = (stack, step, dir, io) => {  // closest step before/after that h
   return [];
 };
 const center = mesh => mesh.getWorldPosition(new THREE.Vector3());
-const lines = (pairs, color, opacity) => {
+const lineMats = [];
+const lines = (pairs, color, opacity, linewidth) => {
   if (!pairs.length) return;
-  const g = new THREE.BufferGeometry().setFromPoints(pairs.flatMap(([a, b]) => [center(a), center(b)]));
-  traces.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({color, transparent: true, opacity})));
+  const g = new LineSegmentsGeometry().setPositions(pairs.flatMap(([a, b]) => [...center(a).toArray(), ...center(b).toArray()]));
+  const mat = new LineMaterial({color, transparent: true, opacity, linewidth}); mat.resolution.set(view.clientWidth, view.clientHeight); lineMats.push(mat);
+  traces.add(new LineSegments2(g, mat));
 };
 const refresh = (scroll = true) => {
   redraw();
-  traces.clear();
+  traces.clear(); lineMats.length = 0;
   const sel = meshes.filter(m => selected.has(skey(m.userData)));
   for (const m of meshes) {
     const on = selected.has(skey(m.userData));
@@ -302,8 +321,8 @@ const refresh = (scroll = true) => {
     }
   }
   for (const [a, b] of flow) for (const n of [a, b]) if (!selected.has(skey(n.userData))) n.material.opacity = 0.35;
-  lines(flow, 0x9fd3ff, 0.35);
-  lines(spine, 0xffffff, 0.9);
+  lines(flow, 0x9fd3ff, 0.45, TRACE_PX.flow);
+  lines(spine, 0xffffff, 0.9, TRACE_PX.spine);
   const names = [...byKey.keys()].map(k => short(k.split('|')[1]));
   for (const r of rows.children) r.classList.toggle('on', selected.has(r.dataset.k));
   if (scroll) rows.querySelector('.on')?.scrollIntoView({block: 'nearest'});
@@ -359,6 +378,7 @@ const hover = e => {
   if (!hot) return;
   if (!selected.size) hot.material.opacity = OPACITY.hot;
   const t = hot.userData;
+  if (!card.classList.contains('pin')) layerCard(t.name);
   info.textContent = `${t.name}${t.count > 1 ? ` (×${t.count})` : ''}  [${t.shape.join(' × ')}]  out × in  ${t.dtype}  ${fmt(numel(t.shape) * t.count)}`;
 };
 renderer.domElement.addEventListener('pointerdown', e => down = [e.clientX, e.clientY]);
@@ -367,8 +387,42 @@ renderer.domElement.addEventListener('pointerup', e => {
   const hit = hitAt(e);
   if (!e.shiftKey) { const k = hit && skey(hit.userData), had = selected.has(k) && selected.size === 1; selected.clear(); if (hit && !had) selected.add(k); }
   else if (hit) { const k = skey(hit.userData); selected.has(k) ? selected.delete(k) : selected.add(k); }
+  const pin = !!hit && selected.has(skey(hit.userData));  // click pins the card opaque; hover alone shows it faint
+  card.classList.toggle('pin', pin); why.classList.toggle('pin', pin);
+  if (pin) layerCard(hit.userData.name); else if (!hit) card.hidden = why.hidden = true;
   refresh();
 });
+// layer card: every tensor of the hovered layer (1D included) with shape, dtype, params and share of the layer
+const card = document.getElementById('card'), why = document.getElementById('why'), hintBtn = document.getElementById('hint');
+const setHint = on => { view.classList.toggle('nohint', !on); hintBtn.textContent = on ? 'hide hint' : 'show hint'; localStorage.setItem('hint', on ? '1' : '0'); };
+setHint(localStorage.getItem('hint') !== '0'); hintBtn.onclick = () => setHint(view.classList.contains('nohint'));
+const tabs = [['tabL', 'noside', '‹', '›'], ['tabR', 'noraw', '›', '‹']];  // [button, body class when collapsed, glyph open, glyph closed]
+const setTab = ([id, cls, open, shut], on) => { document.body.classList.toggle(cls, !on); document.getElementById(id).textContent = on ? open : shut; localStorage.setItem(cls, on ? '0' : '1'); };
+for (const t of tabs) { setTab(t, localStorage.getItem(t[1]) !== '1'); document.getElementById(t[0]).onclick = () => { setTab(t, document.body.classList.contains(t[1])); dispatchEvent(new Event('resize')); }; }
+const detBtn = document.getElementById('det');
+const setDet = on => { view.classList.toggle('nodet', !on); detBtn.textContent = on ? 'hide details' : 'show details'; localStorage.setItem('det', on ? '1' : '0'); };
+setDet(localStorage.getItem('det') !== '0'); detBtn.onclick = () => setDet(view.classList.contains('nodet'));
+const LAYER_TYPES = [  // [label, test on the layer's tensor names, one-line tentative explanation]; first match wins
+  ['linear attn + MoE', k => /linear_attn/.test(k) && /expert|\.moe|router/.test(k), 'Running-summary attention followed by routed experts, for long contexts at low cost.'],
+  ['linear attn + MLP', k => /linear_attn/.test(k), 'A cheaper attention that keeps a running summary instead of comparing every pair of tokens, then a feed-forward network.'],
+  ['mamba/SSM', k => /mamba|ssm|A_log|conv1d|mixer\.(in|out)_proj/.test(k), 'A state-space layer that carries a compressed memory of the sequence, read in one pass like an RNN.'],
+  ['cross+self attn', k => /cross_attn|encoder_attn|attn2/.test(k), 'Tokens attend to each other and also to an outside signal, like a text prompt guiding an image or audio.'],
+  ['attention + MoE', k => /attn|attention|q_proj|qkv|to_q/.test(k) && /expert|\.moe|router/.test(k), 'Attention mixes the tokens, then a router sends each token to a few of many expert networks, so only part of the weights run per token.'],
+  ['attention + MLP', k => /attn|attention|q_proj|qkv|to_q/.test(k) && /mlp|ffn|feed_forward|fc\d|\.ff\./.test(k), 'Each token looks at the other tokens, then a feed-forward network transforms each one on its own.'],
+  ['attention, no MLP', k => /attn|attention|q_proj|qkv|to_q/.test(k), 'Attention only; the transform step is elsewhere or named differently.'],
+  ['conv/resnet', k => /conv|resnet/.test(k), 'Convolutions that mix nearby pixels or samples, typical of image and audio encoders and decoders.'],
+  ['unclassified', () => true, 'Layer type not recognized from its tensor names.'],
+];
+const layerCard = name => {
+  const m = name.match(/^(.*?\.\d+)\./);
+  if (!m) { card.hidden = why.hidden = true; return; }
+  const ts = Object.entries(rec.tensors).filter(([n]) => n.startsWith(m[1] + '.')).map(([n, [dtype, shape, count]]) => ({n, key: n.slice(m[1].length + 1), dtype, shape, count, p: numel(shape) * count, b: numel(shape) * count * (BYTES[dtype] ?? 2)}));
+  const P = ts.reduce((a, t) => a + t.p, 0), B = ts.reduce((a, t) => a + t.b, 0);
+  card.innerHTML = `<div class="h">${m[1]} <i>· ${ts.length} tensors · ${fmt(P)} params · ${(B / 2 ** 20).toFixed(1)} MiB · ${(P / params * 100).toFixed(2)}% of model</i></div><table>`
+    + ts.map(t => `<tr class="${t.n === name ? 'on' : ''}"><td>${t.key}${t.count > 1 ? ` ×${t.count}` : ''}</td><td>${t.shape.join('×')}</td><td>${t.dtype}</td><td>${fmt(t.p)}</td><td>${(t.p / P * 100).toFixed(1)}%</td></tr>`).join('') + '</table>';
+  const [lt, , text] = LAYER_TYPES.find(([, f]) => f(ts.map(t => t.key).join(' ')));
+  why.innerHTML = `<b>${lt}</b> · ${text}`; card.hidden = why.hidden = false;
+};
 // raw panel: every tensor as stored; click a row to select its subcomponent in 3D
 // raw panel: grouped by stack, per-layer tensors collapsed to one row per subcomponent; click a row to select it in 3D
 const rows = document.getElementById('rows'), byName = new Map(meshes.map(m => [m.userData.name, skey(m.userData)])), drawn = new Set(byName.values());
@@ -414,12 +468,12 @@ const rqIn = document.getElementById('rq'); rqIn.value = localStorage.getItem('r
 rqIn.oninput = e => { localStorage.setItem('rq', e.target.value); const q = e.target.value.toLowerCase(); for (const r of rows.children) r.hidden = !!q && !r.title.toLowerCase().includes(q); };
 rqIn.oninput({target: rqIn});
 
-addEventListener('keydown', e => { if (e.key === 'Escape') { selected.clear(); refresh(); } });
+addEventListener('keydown', e => { if (e.key === 'Escape') { selected.clear(); card.hidden = why.hidden = true; card.classList.remove('pin'); why.classList.remove('pin'); refresh(); } });
 
 const resize = () => {
   const w = view.clientWidth, h = view.clientHeight;
   camera.aspect = w / h; camera.updateProjectionMatrix();
-  renderer.setSize(w, h); css.setSize(w, h);
+  renderer.setSize(w, h); css.setSize(w, h); for (const m of lineMats) m.resolution.set(w, h);
 };
 addEventListener('resize', () => { resize(); cullDirty = true; redraw(); }); resize();
 renderer.setAnimationLoop(t => {
