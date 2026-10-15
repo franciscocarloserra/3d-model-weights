@@ -22,6 +22,7 @@
  #raw input{margin:8px 10px;background:#0d0f12;color:#c8ccd2;border:1px solid #2a2f38;border-radius:3px;padding:4px 6px;font:12px system-ui}
  #rows{overflow-y:auto;flex:1}
  #rows div{padding:1px 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+ :where(#list) a:nth-child(even),:where(#rows) div.z{background:#16191e}
  #rows div:hover{background:#1b1f26} #rows div.on{background:#24364d;color:#fff} #rows div.d1{opacity:.45;cursor:default}
  #rows div.h{margin-top:8px;padding:3px 10px;color:#e6e9ee;font:600 11px system-ui;cursor:default;border-bottom:1px solid #1f232a}
  #rows div.h:hover{background:none} #rows div.h i{font-style:normal;font-weight:400;color:#6b717a}
@@ -384,10 +385,10 @@ const hl = key => key.split('.').map((p, i, a) => p === '*' ? '<u>*</u>' : i ===
 rows.innerHTML = [...groups].map(([stack, g]) => {
   const list = [...g.values()].sort((a, b) => (a.shape.length < 2) - (b.shape.length < 2) || kindOf(a.key) - kindOf(b.key) || a.key.localeCompare(b.key));
   const nl = new Set(list.flatMap(t => t.layers)).size;
-  return `<div class="h" data-s="${stack}">${stack}${nl ? ` <i>· ${nl} layers</i>` : ''}</div>` + list.map(t => {
+  return `<div class="h" data-s="${stack}">${stack}${nl ? ` <i>· ${nl} layers</i>` : ''}</div>` + list.map((t, i) => {
     const c = KINDS[kindOf(stack + '.' + t.key)][2].toString(16).padStart(6, '0'), on = drawn.has(t.k);
     const L = t.layers.length && t.layers.length < nl ? ` L${ranges(t.layers)}` : '';
-    return `<div data-k="${t.k}" class="${on ? '' : 'd1'}" title="${stack}.${t.key}" style="border-left:2px solid #${c}${on ? '' : '55'}">${hl(t.key)} <b>[${t.shape.join('×')}] ${t.dtype}${t.count > 1 ? ' ×' + t.count : ''}${L}</b></div>`;
+    return `<div data-k="${t.k}" class="${on ? '' : 'd1'}${i % 2 ? ' z' : ''}" title="${stack}.${t.key}" style="border-left:2px solid #${c}${on ? '' : '55'}">${hl(t.key)} <b>[${t.shape.join('×')}] ${t.dtype}${t.count > 1 ? ' ×' + t.count : ''}${L}</b></div>`;
   }).join('');
 }).join('');
 let preview = null;  // hovered row or stack header lights its subcomponents in 3D
