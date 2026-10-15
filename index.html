@@ -157,9 +157,11 @@ view.appendChild(css.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 let cullDirty = true, cullAt = 0;
-controls.addEventListener('change', () => cullDirty = true);
+controls.addEventListener('change', () => { cullDirty = true; redraw(); });
 
 let into = world;  // group the builders add to
+let needsDraw = true; const redraw = () => needsDraw = true;  // render only when something changed
+const setEdge = (m, a) => { for (let j = m.userData.edge, e = j + 24; j < e; j++) eRGBA[j * 4 + 3] = a; outlineGeo.attributes.color.needsUpdate = true; };
 const labels = [];  // [el, priority]: io, then groups, then tensor names
 const label = (text, x, y, z, cls = 'lbl') => {
   const d = document.createElement('div'); d.className = cls; d.textContent = text;
@@ -187,7 +189,6 @@ const slab = (t, x, y) => {  // matrix [out, in...]: in along x, out along z
   const color = KINDS.find(k => k[1].test(t.name))[2];
   const mesh = new THREE.Mesh(box, new THREE.MeshBasicMaterial({color, transparent: true, opacity: OPACITY.base}));
   mesh.scale.set(w, THICK, d); mesh.position.set(x + w / 2, y, 0);
-  mesh.add(new THREE.LineSegments(edges, new THREE.LineBasicMaterial({color, transparent: true, opacity: 0.75})));
   mesh.userData = t; into.add(mesh); meshes.push(mesh);
   ((pos[t.stack] ??= {})[t.step] ??= {in: [], out: []})[t.io].push(mesh);
   return {w, d};
@@ -275,12 +276,13 @@ const lines = (pairs, color, opacity) => {
   traces.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({color, transparent: true, opacity})));
 };
 const refresh = (scroll = true) => {
+  redraw();
   traces.clear();
   const sel = meshes.filter(m => selected.has(skey(m.userData)));
   for (const m of meshes) {
     const on = selected.has(skey(m.userData));
     m.material.opacity = !selected.size ? OPACITY.base : on ? OPACITY.sel : OPACITY.dim;
-    m.children[0].material.opacity = !selected.size || on ? 0.75 : 0.12;
+    setEdge(m, !selected.size || on ? 0.75 : 0.12);
   }
   const spine = [], flow = [];
   const byKey = Map.groupBy(sel, m => skey(m.userData));
@@ -311,6 +313,19 @@ legendEl.innerHTML = legendHTML;
 
 const bounds = new THREE.Box3();
 world.updateMatrixWorld(true);
+// all slab outlines in one draw call: edge vertices baked to world space, per-vertex RGBA so each slab keeps its own opacity
+const ePos = edges.attributes.position, nE = ePos.count, eXYZ = new Float32Array(meshes.length * nE * 3), eRGBA = new Float32Array(meshes.length * nE * 4), v = new THREE.Vector3();
+meshes.forEach((m, i) => {
+  m.userData.edge = i * nE;
+  for (let j = 0; j < nE; j++) {
+    v.fromBufferAttribute(ePos, j).applyMatrix4(m.matrixWorld).toArray(eXYZ, (i * nE + j) * 3);
+    m.material.color.toArray(eRGBA, (i * nE + j) * 4); eRGBA[(i * nE + j) * 4 + 3] = 0.75;
+  }
+});
+const outlineGeo = new THREE.BufferGeometry();
+outlineGeo.setAttribute('position', new THREE.BufferAttribute(eXYZ, 3));
+outlineGeo.setAttribute('color', new THREE.BufferAttribute(eRGBA, 4));
+scene.add(new THREE.LineSegments(outlineGeo, new THREE.LineBasicMaterial({vertexColors: true, transparent: true})));
 for (const m of meshes) bounds.expandByObject(m);
 const c = bounds.getCenter(new THREE.Vector3()), sz = bounds.getSize(new THREE.Vector3());
 const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)), dist = FIT * Math.max(sz.y / 2 / tanV, sz.x / 2 / (tanV * aspect)) + sz.z / 2 || 50;
@@ -329,16 +344,19 @@ const hitAt = e => {
   return ray.intersectObjects(meshes, false)[0]?.object || null;
 };
 let hot = null, down = null;
-renderer.domElement.addEventListener('pointermove', e => {
+let moved = null;  // last pointermove, handled once per frame
+renderer.domElement.addEventListener('pointermove', e => moved = e);
+const hover = e => {
   const hit = hitAt(e);
   if (hit === hot) return;
+  redraw();
   if (hot && !selected.size) hot.material.opacity = OPACITY.base;
   hot = hit;
   if (!hot) return;
   if (!selected.size) hot.material.opacity = OPACITY.hot;
   const t = hot.userData;
   info.textContent = `${t.name}${t.count > 1 ? ` (×${t.count})` : ''}  [${t.shape.join(' × ')}]  out × in  ${t.dtype}  ${fmt(numel(t.shape) * t.count)}`;
-});
+};
 renderer.domElement.addEventListener('pointerdown', e => down = [e.clientX, e.clientY]);
 renderer.domElement.addEventListener('pointerup', e => {
   if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 4) return;  // was an orbit drag
@@ -377,7 +395,8 @@ rows.onmouseover = e => {
   if (id === preview) return;
   preview = id; refresh(false);
   if (!id) return;
-  for (const m of meshes) if (r.dataset.k ? skey(m.userData) === id : m.userData.stack === id) { m.material.opacity = OPACITY.hot; m.children[0].material.opacity = 1; }
+  for (const m of meshes) if (r.dataset.k ? skey(m.userData) === id : m.userData.stack === id) { m.material.opacity = OPACITY.hot; setEdge(m, 1); }
+  redraw();
 };
 rows.onmouseleave = () => { preview = null; refresh(false); };
 rows.onclick = e => {
@@ -396,9 +415,11 @@ const resize = () => {
   camera.aspect = w / h; camera.updateProjectionMatrix();
   renderer.setSize(w, h); css.setSize(w, h);
 };
-addEventListener('resize', () => { resize(); cullDirty = true; }); resize();
+addEventListener('resize', () => { resize(); cullDirty = true; redraw(); }); resize();
 renderer.setAnimationLoop(t => {
-  controls.update(); renderer.render(scene, camera); css.render(scene, camera);
+  if (moved) { hover(moved); moved = null; }
+  controls.update();
+  if (needsDraw) { needsDraw = false; renderer.render(scene, camera); css.render(scene, camera); }
   if (cullDirty && t - cullAt > LABEL_CULL_MS) { cullDirty = false; cullAt = t; cull(); }
 });
 </script>

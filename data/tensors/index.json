@@ -1192,5 +1192,311 @@
   "id": "upstage/Solar-Open2-250B",
   "rank": 199,
   "error": null
+ },
+ {
+  "file": "XiaomiMiMo__MiMo-V2-Flash",
+  "id": "XiaomiMiMo/MiMo-V2-Flash",
+  "rank": 200,
+  "error": null
+ },
+ {
+  "file": "WarmBloodAban__Minimax-h3_Singularity",
+  "id": "WarmBloodAban/Minimax-h3_Singularity",
+  "rank": 201,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen3.5-0.8B",
+  "id": "Qwen/Qwen3.5-0.8B",
+  "rank": 202,
+  "error": null
+ },
+ {
+  "file": "nvidia__Nemotron-3-Diarization",
+  "id": "nvidia/Nemotron-3-Diarization",
+  "rank": 203,
+  "error": null
+ },
+ {
+  "file": "Cloudflare__clef-flash",
+  "id": "Cloudflare/clef-flash",
+  "rank": 204,
+  "error": null
+ },
+ {
+  "file": "orcarouter__Qwen3.8-Flash-Next-Uncensored-GGUF",
+  "id": "orcarouter/Qwen3.8-Flash-Next-Uncensored-GGUF",
+  "rank": 205,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "HauhauCS__Qwen3.6-27B-Uncensored-HauhauCS-Aggressive",
+  "id": "HauhauCS/Qwen3.6-27B-Uncensored-HauhauCS-Aggressive",
+  "rank": 206,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "Qwen__Qwen-AgentWorld-35B-A3B",
+  "id": "Qwen/Qwen-AgentWorld-35B-A3B",
+  "rank": 207,
+  "error": null
+ },
+ {
+  "file": "deepseek-ai__DeepSeek-V3.2-Speciale",
+  "id": "deepseek-ai/DeepSeek-V3.2-Speciale",
+  "rank": 208,
+  "error": null
+ },
+ {
+  "file": "unsloth__GLM-4.7-Flash-GGUF",
+  "id": "unsloth/GLM-4.7-Flash-GGUF",
+  "rank": 209,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "facebook__tribev2",
+  "id": "facebook/tribev2",
+  "rank": 210,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "ponpoke__flux2-klein-9b-uncensored-text-encoder",
+  "id": "ponpoke/flux2-klein-9b-uncensored-text-encoder",
+  "rank": 211,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a422-20b1df966ad9307d098cee44;6f907842-0f38-4466-a64b-8114275b5ebc)\n\nCannot access gated repo for url https://huggingface.co/ponpoke/flux2-klein-9b-uncensored-text-encoder/resolve/main/model.safetensors.\nAccess to model ponpoke/flux2-klein-9b"
+ },
+ {
+  "file": "ornith-ai__Ornith-1.5-35B-A3B",
+  "id": "ornith-ai/Ornith-1.5-35B-A3B",
+  "rank": 212,
+  "error": null
+ },
+ {
+  "file": "tencent__HY-World-2.0",
+  "id": "tencent/HY-World-2.0",
+  "rank": 213,
+  "error": null
+ },
+ {
+  "file": "deepseek-ai__DeepSeek-Math-V2",
+  "id": "deepseek-ai/DeepSeek-Math-V2",
+  "rank": 214,
+  "error": null
+ },
+ {
+  "file": "bottlecapai__ThinkingCap-Qwen3.6-27B",
+  "id": "bottlecapai/ThinkingCap-Qwen3.6-27B",
+  "rank": 215,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a468-0463273e347b601071b31137;05b366d7-7b80-4ba8-8ae0-2f1998ba2bf2)\n\nCannot access gated repo for url https://huggingface.co/bottlecapai/ThinkingCap-Qwen3.6-27B/resolve/main/model-00001-of-00002.safetensors.\nAccess to model bottlecapai/Thinki"
+ },
+ {
+  "file": "Viggle__Qwen-Image-2.1-viggle-turbo",
+  "id": "Viggle/Qwen-Image-2.1-viggle-turbo",
+  "rank": 216,
+  "error": null
+ },
+ {
+  "file": "ethanfel__Qwen3-VL-32B-Ultra-Heretic-H3-ComfyUI-INT8-ConvRot",
+  "id": "ethanfel/Qwen3-VL-32B-Ultra-Heretic-H3-ComfyUI-INT8-ConvRot",
+  "rank": 217,
+  "error": null
+ },
+ {
+  "file": "ResembleAI__chatterbox-turbo",
+  "id": "ResembleAI/chatterbox-turbo",
+  "rank": 218,
+  "error": null
+ },
+ {
+  "file": "XiaomiMiMo__MiMo-V2.6-Pro-RL",
+  "id": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
+  "rank": 219,
+  "error": null
+ },
+ {
+  "file": "Venastine-Research__Xing4.0-29B-A4B-GGUF",
+  "id": "Venastine-Research/Xing4.0-29B-A4B-GGUF",
+  "rank": 220,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "Tesslate__OmniCoder-9B",
+  "id": "Tesslate/OmniCoder-9B",
+  "rank": 221,
+  "error": null
+ },
+ {
+  "file": "LuffyTheFox__Qwen3.6-35B-A3B-Uncensored-Genesis-Hermes-GGUF",
+  "id": "LuffyTheFox/Qwen3.6-35B-A3B-Uncensored-Genesis-Hermes-GGUF",
+  "rank": 222,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "openbmb__MiniCPM-SALA",
+  "id": "openbmb/MiniCPM-SALA",
+  "rank": 223,
+  "error": null
+ },
+ {
+  "file": "BreezeBlue__Breeze-TTS-2",
+  "id": "BreezeBlue/Breeze-TTS-2",
+  "rank": 224,
+  "error": null
+ },
+ {
+  "file": "Jackrong__Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF",
+  "id": "Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-GGUF",
+  "rank": 225,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "baidu__ERNIE-Image",
+  "id": "baidu/ERNIE-Image",
+  "rank": 226,
+  "error": null
+ },
+ {
+  "file": "mistralai__Devstral-Small-2-24B-Instruct-2512",
+  "id": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+  "rank": 227,
+  "error": null
+ },
+ {
+  "file": "LiquidAI__LFM2.5-1.2B-Instruct",
+  "id": "LiquidAI/LFM2.5-1.2B-Instruct",
+  "rank": 228,
+  "error": null
+ },
+ {
+  "file": "ornith-ai__Ornith-1.0-9B-GGUF",
+  "id": "ornith-ai/Ornith-1.0-9B-GGUF",
+  "rank": 229,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "nex-agi__Nex-N2.5-Pro",
+  "id": "nex-agi/Nex-N2.5-Pro",
+  "rank": 230,
+  "error": null
+ },
+ {
+  "file": "PaddlePaddle__PaddleOCR-VL-1.5",
+  "id": "PaddlePaddle/PaddleOCR-VL-1.5",
+  "rank": 231,
+  "error": null
+ },
+ {
+  "file": "Comfy-Org__Krea-2",
+  "id": "Comfy-Org/Krea-2",
+  "rank": 232,
+  "error": null
+ },
+ {
+  "file": "Kwaipilot__KAT-Coder-V2.5-Dev",
+  "id": "Kwaipilot/KAT-Coder-V2.5-Dev",
+  "rank": 233,
+  "error": null
+ },
+ {
+  "file": "FunAudioLLM__Fun-CosyVoice3-0.5B-2512",
+  "id": "FunAudioLLM/Fun-CosyVoice3-0.5B-2512",
+  "rank": 234,
+  "error": null
+ },
+ {
+  "file": "dealignai__GLM-5.3-CYBERSECURITY-FP8",
+  "id": "dealignai/GLM-5.3-CYBERSECURITY-FP8",
+  "rank": 235,
+  "error": null
+ },
+ {
+  "file": "0bserverx__Qwen3.8-27B-Heretic-Abliterated-Uncensored-GGUF",
+  "id": "0bserverx/Qwen3.8-27B-Heretic-Abliterated-Uncensored-GGUF",
+  "rank": 236,
+  "error": null
+ },
+ {
+  "file": "unsloth__GLM-5.2-GGUF",
+  "id": "unsloth/GLM-5.2-GGUF",
+  "rank": 237,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "InternScience__Agents-A1",
+  "id": "InternScience/Agents-A1",
+  "rank": 238,
+  "error": null
+ },
+ {
+  "file": "unsloth__gemma-4-E4B-it-GGUF",
+  "id": "unsloth/gemma-4-E4B-it-GGUF",
+  "rank": 239,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "AlexWortega__openjev",
+  "id": "AlexWortega/openjev",
+  "rank": 240,
+  "error": null
+ },
+ {
+  "file": "nvidia__Qwen3.6-35B-A3B-NVFP4",
+  "id": "nvidia/Qwen3.6-35B-A3B-NVFP4",
+  "rank": 241,
+  "error": null
+ },
+ {
+  "file": "kpsss34__FHDR_Uncensored",
+  "id": "kpsss34/FHDR_Uncensored",
+  "rank": 242,
+  "error": null
+ },
+ {
+  "file": "lkzd7__WAN2.2_LoraSet_NSFW",
+  "id": "lkzd7/WAN2.2_LoraSet_NSFW",
+  "rank": 243,
+  "error": "SafetensorsParsingError: Failed to parse safetensors header for 'Pornmaster_wan 2.2_14b_I2V_bukkake_v1.4_high_noise.safetensors' (repo 'lkzd7/WAN2.2_LoraSet_NSFW', revision 'main'): header is not json-encoded string. Please make sure this is a correctly formatted safetensors file."
+ },
+ {
+  "file": "XiaomiMiMo__MiMo-V2.6-Distill-Qwen-9B",
+  "id": "XiaomiMiMo/MiMo-V2.6-Distill-Qwen-9B",
+  "rank": 244,
+  "error": null
+ },
+ {
+  "file": "nvidia__nemotron-speech-streaming-en-0.6b",
+  "id": "nvidia/nemotron-speech-streaming-en-0.6b",
+  "rank": 245,
+  "error": null
+ },
+ {
+  "file": "unsloth__Qwen-Image-Edit-2511-GGUF",
+  "id": "unsloth/Qwen-Image-Edit-2511-GGUF",
+  "rank": 246,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "unsloth__gemma-4-31B-it-GGUF",
+  "id": "unsloth/gemma-4-31B-it-GGUF",
+  "rank": 247,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "Qwen__Qwen3.5-122B-A10B",
+  "id": "Qwen/Qwen3.5-122B-A10B",
+  "rank": 248,
+  "error": null
+ },
+ {
+  "file": "zai-org__GLM-4.6V-Flash",
+  "id": "zai-org/GLM-4.6V-Flash",
+  "rank": 249,
+  "error": null
+ },
+ {
+  "file": "ukisai__Swift-Qwen3.8-27b",
+  "id": "ukisai/Swift-Qwen3.8-27b",
+  "rank": 250,
+  "error": null
  }
 ]
