@@ -7,6 +7,7 @@
  #tabL{left:var(--L);border-radius:0 4px 4px 0;border-left:0} #tabR{right:var(--R);border-radius:4px 0 0 4px;border-right:0}
  header{position:fixed;top:0;left:var(--L);right:var(--R);height:64px;z-index:2;padding:0 14px;box-sizing:border-box;border-bottom:1px solid #1f232a;display:flex;align-items:center;gap:14px}
  h1{margin:0;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;max-width:40%}
+ #title{color:inherit;text-decoration:none} #title[href]:hover{text-decoration:underline}
  #msg{color:#8a8f98;font-size:12px;margin-left:10px}
  #cards{display:flex;gap:6px;overflow-x:auto;flex:1;min-width:0}
  .card{background:#15181d;border:1px solid #1f232a;border-radius:4px;padding:4px 9px;white-space:nowrap}
@@ -15,6 +16,8 @@
  #side #brand{display:flex;align-items:center;gap:10px;padding:12px 10px 4px;color:#fff;font-size:18px;font-weight:700;line-height:1.15;white-space:normal}
  #brand img{width:48px;height:48px;border-radius:8px}
  #side .from{display:block;padding:0 10px 4px 68px;color:#8a8f98;font-size:11px;text-decoration:none} #side .from:hover{color:#c8ccd2}
+ #side #load{display:block;margin:8px 10px 0;padding:4px 6px;border:1px dashed #2f4a6a;border-radius:3px;color:#9fd3ff;font-size:12px;text-align:center;cursor:pointer} #side #load:hover{background:#1b1f26}
+ body.drag #view{outline:2px dashed #9fd3ff;outline-offset:-6px}
  #note{margin:10px;color:#5d636c;font-size:10px;line-height:1.4}
  [hidden]{display:none!important} input{box-sizing:border-box}
  #side input{width:calc(100% - 20px);margin:8px 10px;background:#0d0f12;color:#c8ccd2;border:1px solid #2a2f38;border-radius:3px;padding:4px 6px}
@@ -48,8 +51,8 @@
 </style>
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 </head><body>
-<nav id="side"><a id="brand" href="?"><img src="logo.png" alt="">3D Model Weights</a><a class="from" href="https://franciscocarloserra.github.io/hf-top-models/">top 300 by likes ↗</a><a class="from" href="https://github.com/franciscocarloserra/3d-model-weights">source on GitHub ↗</a><a class="from" href="https://x.com/francarloerra">@francarloerra on X ↗</a><input id="q" autocomplete="off" placeholder="filter"><div id="list"></div><p id="note">Tensor names and shapes belong to the original model owners, under each model's license. No weights included. MIT code.</p></nav>
-<header><h1><span id="title"></span><span id="msg"></span></h1><div id="cards"></div></header>
+<nav id="side"><a id="brand" href="?"><img src="logo.png" alt="">3D Model Weights</a><a class="from" href="https://franciscocarloserra.github.io/hf-top-models/">top 300 by likes ↗</a><a class="from" href="https://github.com/franciscocarloserra/3d-model-weights">source on GitHub ↗</a><a class="from" href="https://x.com/francarloerra">@francarloerra on X ↗</a><label id="load" title="front-end only, nothing is uploaded!">Load a custom model<input id="files" type="file" multiple accept=".safetensors" hidden></label><input id="q" autocomplete="off" placeholder="filter"><div id="list"></div><p id="note">Tensor names and shapes belong to the original model owners, under each model's license. No weights included. MIT code.</p></nav>
+<header><h1><a id="title" target="_blank" rel="noopener"></a><span id="msg"></span></h1><div id="cards"></div></header>
 <div id="view"><div id="card" hidden></div><div id="why" hidden></div><button id="hint">hide hint</button><button id="det">hide details</button></div>
 <aside id="raw"><input id="rq" autocomplete="off" placeholder="filter tensors"><div id="rows"></div></aside>
 <button class="tab" id="tabL"></button><button class="tab" id="tabR"></button>
@@ -65,7 +68,7 @@ try { new PerformanceObserver(l => l.getEntries().forEach(e => e.duration > 200 
 </script>
 <script type="module">
 import * as THREE from 'three';
-for (const c of ['noside', 'noraw']) document.body.classList.toggle(c, localStorage.getItem(c) === '1');  // before layout reads the view size
+for (const [c, def] of [['noside', '0'], ['noraw', '1']]) document.body.classList.toggle(c, (localStorage.getItem('pane-' + c) ?? def) === '1');  // before layout reads the view size; panes default: list open, tensors closed
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
@@ -103,6 +106,38 @@ const IS_MTP = /(^|\.)mtp(\.|$)|nextn/;
 const WRITES = /(^|\.)(o_proj|out_proj|down_proj|fc2|linear_fc2|proj|proj_out|to_out|w2|wo|lm_head)(\.|$)/;  // write the residual stream
 
 const list = document.getElementById('list'), msg = document.getElementById('msg'), info = document.getElementById('info');
+// custom model: read only the safetensors headers in the browser (8-byte length + JSON), nothing is uploaded
+const compact = files => {  // [[path, header]] -> {name: [dtype, shape, count]}, same as compact() in fetch_tensors.py
+  const out = {};
+  for (const [f, hdr] of files) {
+    const folder = f.includes('/') ? f.slice(0, f.lastIndexOf('/') + 1) : '';
+    for (const [name, v] of Object.entries(hdr)) {
+      if (name === '__metadata__') continue;
+      let seen = false;
+      const key = folder + name.split('.').map(p => /^\d+$/.test(p) ? (seen ? '*' : (seen = true, p)) : p).join('.');
+      out[key] ??= [v.dtype, v.shape, 0];
+      if (out[key][1].join() === v.shape.join()) out[key][2]++;
+    }
+  }
+  return out;
+};
+const loadLocal = async fs => {
+  fs = [...fs].filter(f => f.name.endsWith('.safetensors'));
+  if (!fs.length) return;
+  const files = await Promise.all(fs.map(async f => {
+    const n = Number(new DataView(await f.slice(0, 8).arrayBuffer()).getBigUint64(0, true));
+    return [(f.webkitRelativePath || f.name).split('/').slice(1).join('/') || f.name, JSON.parse(await f.slice(8, 8 + n).text())];
+  }));
+  const top = fs[0].webkitRelativePath?.split('/')[0];
+  const tensors = compact(files);
+  sessionStorage.setItem('local', JSON.stringify({id: `local/${top || fs[0].name.replace(/\.safetensors$/, '')}`, tensors, n_files: fs.length, n_tensors: files.reduce((a, [, h]) => a + Object.keys(h).length - ('__metadata__' in h), 0)}));
+  location.search = '?m=__local';
+};
+document.getElementById('files').onchange = e => loadLocal(e.target.files);
+addEventListener('dragover', e => { e.preventDefault(); document.body.classList.add('drag'); });
+addEventListener('dragleave', e => { if (!e.relatedTarget) document.body.classList.remove('drag'); });
+addEventListener('drop', e => { e.preventDefault(); document.body.classList.remove('drag'); loadLocal(e.dataTransfer.files); });
+
 const index = await (await fetch('data/tensors/index.json')).json();
 const cur = new URLSearchParams(location.search).get('m') || index.find(r => !r.error)?.file;
 list.innerHTML = index.filter(r => !r.error).map(r => { const [pub, name] = r.id.split('/');
@@ -111,8 +146,8 @@ list.querySelector('.on')?.scrollIntoView({block: 'center'});
 const qIn = document.getElementById('q'); qIn.value = localStorage.getItem('q') || '';
 qIn.oninput = e => { localStorage.setItem('q', e.target.value); const q = e.target.value.toLowerCase(); for (const a of list.children) a.hidden = !a.textContent.toLowerCase().includes(q); };
 qIn.oninput({target: qIn});
-const rec = await (await fetch(`data/tensors/${cur}.json`)).json();
-document.getElementById('title').textContent = rec.id; document.title = `${rec.id} · 3D Model Weights`;
+const rec = cur === '__local' ? JSON.parse(sessionStorage.getItem('local') || '{"id": "local", "error": "local model lost, load it again"}') : await (await fetch(`data/tensors/${cur}.json`)).json();
+{ const t = document.getElementById('title'); t.textContent = rec.id; if (cur !== '__local') { t.href = `https://huggingface.co/${rec.id}`; t.title = 'open on Hugging Face'; } } document.title = `${rec.id} · 3D Model Weights`;
 if (rec.error) msg.textContent = rec.error.split('\n')[0];
 
 const numel = sh => sh.reduce((a, b) => a * b, 1);
@@ -160,7 +195,7 @@ const cards = [
   main && [main.layers.size, 'layers'], emb && [emb.shape[1].toLocaleString(), 'hidden'], emb && [emb.shape[0].toLocaleString(), 'vocab'],
   up && [up.shape[0].toLocaleString(), up.count > 1 || up.key.includes('expert') ? 'expert width' : 'mlp width'],
   experts >= 2 && [experts, 'experts'], split.length && [split[0], split.slice(1).join(' · ') || 'params split'],
-  [`${rec.n_files ?? 0} / ${(rec.n_tensors ?? 0).toLocaleString()}`, 'files / tensors'], [rec.likes.toLocaleString(), `likes · #${rec.rank}`],
+  [`${rec.n_files ?? 0} / ${(rec.n_tensors ?? 0).toLocaleString()}`, 'files / tensors'], rec.likes != null && [rec.likes.toLocaleString(), `likes · #${rec.rank}`],
 ].filter(Boolean);
 if (rec.tensors) document.getElementById('cards').innerHTML = cards.map(([v, l]) => `<div class="card"><b>${v}</b><span>${l}</span></div>`).join('');
 
@@ -397,11 +432,11 @@ const card = document.getElementById('card'), why = document.getElementById('why
 const setHint = on => { view.classList.toggle('nohint', !on); hintBtn.textContent = on ? 'hide hint' : 'show hint'; localStorage.setItem('hint', on ? '1' : '0'); };
 setHint(localStorage.getItem('hint') !== '0'); hintBtn.onclick = () => setHint(view.classList.contains('nohint'));
 const tabs = [['tabL', 'noside', '‹', '›'], ['tabR', 'noraw', '›', '‹']];  // [button, body class when collapsed, glyph open, glyph closed]
-const setTab = ([id, cls, open, shut], on) => { document.body.classList.toggle(cls, !on); document.getElementById(id).textContent = on ? open : shut; localStorage.setItem(cls, on ? '0' : '1'); };
-for (const t of tabs) { setTab(t, localStorage.getItem(t[1]) !== '1'); document.getElementById(t[0]).onclick = () => { setTab(t, document.body.classList.contains(t[1])); dispatchEvent(new Event('resize')); }; }
+const setTab = ([id, cls, open, shut], on, save) => { document.body.classList.toggle(cls, !on); document.getElementById(id).textContent = on ? open : shut; if (save) localStorage.setItem('pane-' + cls, on ? '0' : '1'); };
+for (const t of tabs) { setTab(t, !document.body.classList.contains(t[1])); document.getElementById(t[0]).onclick = () => { setTab(t, document.body.classList.contains(t[1]), true); dispatchEvent(new Event('resize')); }; }
 const detBtn = document.getElementById('det');
-const setDet = on => { view.classList.toggle('nodet', !on); detBtn.textContent = on ? 'hide details' : 'show details'; localStorage.setItem('det', on ? '1' : '0'); };
-setDet(localStorage.getItem('det') !== '0'); detBtn.onclick = () => setDet(view.classList.contains('nodet'));
+const setDet = on => { view.classList.toggle('nodet', !on); detBtn.textContent = on ? 'hide details' : 'show details'; localStorage.setItem('details', on ? '1' : '0'); };
+setDet(localStorage.getItem('details') === '1'); detBtn.onclick = () => setDet(view.classList.contains('nodet'));
 const LAYER_TYPES = [  // [label, test on the layer's tensor names, one-line tentative explanation]; first match wins
   ['linear attn + MoE', k => /linear_attn/.test(k) && /expert|\.moe|router/.test(k), 'Running-summary attention followed by routed experts, for long contexts at low cost.'],
   ['linear attn + MLP', k => /linear_attn/.test(k), 'A cheaper attention that keeps a running summary instead of comparing every pair of tokens, then a feed-forward network.'],
