@@ -91,7 +91,9 @@ const cur = new URLSearchParams(location.search).get('m') || index.find(r => !r.
 list.innerHTML = index.filter(r => !r.error).map(r => { const [pub, name] = r.id.split('/');
   return `<a href="?m=${r.file}" class="${r.file === cur ? 'on' : ''}" title="${r.id}"><i>${r.rank}</i> <u>${pub}/</u>${name}</a>`; }).join('');
 list.querySelector('.on')?.scrollIntoView({block: 'center'});
-document.getElementById('q').oninput = e => { const q = e.target.value.toLowerCase(); for (const a of list.children) a.hidden = !a.textContent.toLowerCase().includes(q); };
+const qIn = document.getElementById('q'); qIn.value = localStorage.getItem('q') || '';
+qIn.oninput = e => { localStorage.setItem('q', e.target.value); const q = e.target.value.toLowerCase(); for (const a of list.children) a.hidden = !a.textContent.toLowerCase().includes(q); };
+qIn.oninput({target: qIn});
 const rec = await (await fetch(`data/tensors/${cur}.json`)).json();
 document.getElementById('title').textContent = rec.id; document.title = `${rec.id} · 3D Model Weights`;
 if (rec.error) msg.textContent = rec.error.split('\n')[0];
@@ -408,7 +410,9 @@ rows.onclick = e => {
   selected.has(k) && e.shiftKey ? selected.delete(k) : selected.add(k);
   refresh();
 };
-document.getElementById('rq').oninput = e => { const q = e.target.value.toLowerCase(); for (const r of rows.children) r.hidden = !!q && !r.title.toLowerCase().includes(q); };
+const rqIn = document.getElementById('rq'); rqIn.value = localStorage.getItem('rq') || '';
+rqIn.oninput = e => { localStorage.setItem('rq', e.target.value); const q = e.target.value.toLowerCase(); for (const r of rows.children) r.hidden = !!q && !r.title.toLowerCase().includes(q); };
+rqIn.oninput({target: rqIn});
 
 addEventListener('keydown', e => { if (e.key === 'Escape') { selected.clear(); refresh(); } });
 
