@@ -4,6 +4,12 @@
 
 The weight matrices of the most-liked Hugging Face models, drawn in 3D. Every 2D tensor is a slab with sides ∝ √(out) and √(in). Layers go from input on the left to output on the right. The model list is the top 300 by likes from [hf-top-models](https://github.com/franciscocarloserra/hf-top-models) ([site](https://franciscocarloserra.github.io/hf-top-models/)).
 
+
+
+https://github.com/user-attachments/assets/53bcf2b2-16bd-42d8-9152-5b98fe8a70ca
+
+
+
 Click a slab (or a row in the tensor panel on the right) to select that subcomponent in every layer. Shift-click adds to the selection, Esc clears it. Hovering a row or a stack header in the panel highlights it.
 
 ## Run
