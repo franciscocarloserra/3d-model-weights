@@ -1534,5 +1534,269 @@
   "id": "NemoStation/Marlin-2B",
   "rank": 256,
   "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a5ca-5c2bacc641d573475ad8776f;63625553-dd4e-4607-9e21-0bfdd71e7093)\n\nCannot access gated repo for url https://huggingface.co/NemoStation/Marlin-2B/resolve/main/model-00001-of-00002.safetensors.\nAccess to model NemoStation/Marlin-2B is restric"
+ },
+ {
+  "file": "nvidia__Nemotron-Orchestrator-8B",
+  "id": "nvidia/Nemotron-Orchestrator-8B",
+  "rank": 257,
+  "error": null
+ },
+ {
+  "file": "Zyphra__ZAYA1-8B",
+  "id": "Zyphra/ZAYA1-8B",
+  "rank": 258,
+  "error": null
+ },
+ {
+  "file": "TenStrip__LTX2.3-10Eros",
+  "id": "TenStrip/LTX2.3-10Eros",
+  "rank": 259,
+  "error": null
+ },
+ {
+  "file": "harshatheg__Qwen-2.5-1B-RLCD",
+  "id": "harshatheg/Qwen-2.5-1B-RLCD",
+  "rank": 260,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "unsloth__LTX-2.3-GGUF",
+  "id": "unsloth/LTX-2.3-GGUF",
+  "rank": 261,
+  "error": null
+ },
+ {
+  "file": "Kijai__MiniMax-H3-experimental",
+  "id": "Kijai/MiniMax-H3-experimental",
+  "rank": 262,
+  "error": null
+ },
+ {
+  "file": "unsloth__gemma-4-12B-it-qat-GGUF",
+  "id": "unsloth/gemma-4-12B-it-qat-GGUF",
+  "rank": 263,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "LGAI-EXAONE__K-EXAONE-236B-A23B",
+  "id": "LGAI-EXAONE/K-EXAONE-236B-A23B",
+  "rank": 264,
+  "error": null
+ },
+ {
+  "file": "nvidia__Gemma-4-31B-IT-NVFP4",
+  "id": "nvidia/Gemma-4-31B-IT-NVFP4",
+  "rank": 265,
+  "error": null
+ },
+ {
+  "file": "CohereLabs__North-Mini-Code-1.0",
+  "id": "CohereLabs/North-Mini-Code-1.0",
+  "rank": 266,
+  "error": null
+ },
+ {
+  "file": "meituan-longcat__LongCat-Video",
+  "id": "meituan-longcat/LongCat-Video",
+  "rank": 267,
+  "error": null
+ },
+ {
+  "file": "nvidia__NitroGen",
+  "id": "nvidia/NitroGen",
+  "rank": 268,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "unsloth__Muse-Glimmer-30B-GGUF",
+  "id": "unsloth/Muse-Glimmer-30B-GGUF",
+  "rank": 269,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "autotrust__GLM5.3-Flash-E224-DGX-Spark",
+  "id": "autotrust/GLM5.3-Flash-E224-DGX-Spark",
+  "rank": 270,
+  "error": null
+ },
+ {
+  "file": "google__gemma-4-31B",
+  "id": "google/gemma-4-31B",
+  "rank": 271,
+  "error": null
+ },
+ {
+  "file": "WeiboAI__VibeThinker-1.5B",
+  "id": "WeiboAI/VibeThinker-1.5B",
+  "rank": 272,
+  "error": null
+ },
+ {
+  "file": "ornith-ai__Ornith-1.0-9B",
+  "id": "ornith-ai/Ornith-1.0-9B",
+  "rank": 273,
+  "error": null
+ },
+ {
+  "file": "HiDream-ai__HiDream-O1-Image",
+  "id": "HiDream-ai/HiDream-O1-Image",
+  "rank": 274,
+  "error": null
+ },
+ {
+  "file": "huihui-ai__Huihui-Qwen3.8-27B-abliterated",
+  "id": "huihui-ai/Huihui-Qwen3.8-27B-abliterated",
+  "rank": 275,
+  "error": null
+ },
+ {
+  "file": "XiaomiMiMo__MiMo-V2.6-Flash-RL",
+  "id": "XiaomiMiMo/MiMo-V2.6-Flash-RL",
+  "rank": 276,
+  "error": null
+ },
+ {
+  "file": "netease-youdao__Confucius4-R2T2",
+  "id": "netease-youdao/Confucius4-R2T2",
+  "rank": 277,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen3-TTS-12Hz-1.7B-Base",
+  "id": "Qwen/Qwen3-TTS-12Hz-1.7B-Base",
+  "rank": 278,
+  "error": null
+ },
+ {
+  "file": "baidu__ERNIE-4.5-VL-28B-A3B-Thinking",
+  "id": "baidu/ERNIE-4.5-VL-28B-A3B-Thinking",
+  "rank": 279,
+  "error": null
+ },
+ {
+  "file": "deepseek-ai__DeepSeek-V4-Pro-DSpark",
+  "id": "deepseek-ai/DeepSeek-V4-Pro-DSpark",
+  "rank": 280,
+  "error": null
+ },
+ {
+  "file": "datalab-to__chandra-ocr-2",
+  "id": "datalab-to/chandra-ocr-2",
+  "rank": 281,
+  "error": null
+ },
+ {
+  "file": "ScottzillaSystems__qwen-image-edit-plus-nsfw-lora",
+  "id": "ScottzillaSystems/qwen-image-edit-plus-nsfw-lora",
+  "rank": 282,
+  "error": null
+ },
+ {
+  "file": "lightx2v__Qwen-Image-Edit-2511-Lightning",
+  "id": "lightx2v/Qwen-Image-Edit-2511-Lightning",
+  "rank": 283,
+  "error": null
+ },
+ {
+  "file": "datalab-to__chandra",
+  "id": "datalab-to/chandra",
+  "rank": 284,
+  "error": null
+ },
+ {
+  "file": "nvidia__NVIDIA-NemotronLabs-VoiceChat-11B",
+  "id": "nvidia/NVIDIA-NemotronLabs-VoiceChat-11B",
+  "rank": 285,
+  "error": null
+ },
+ {
+  "file": "nvidia__Nemotron-Cascade-2-30B-A3B",
+  "id": "nvidia/Nemotron-Cascade-2-30B-A3B",
+  "rank": 286,
+  "error": null
+ },
+ {
+  "file": "tencent__HY-WorldPlay",
+  "id": "tencent/HY-WorldPlay",
+  "rank": 287,
+  "error": null
+ },
+ {
+  "file": "PaddlePaddle__PaddleOCR-VL-1.6",
+  "id": "PaddlePaddle/PaddleOCR-VL-1.6",
+  "rank": 288,
+  "error": null
+ },
+ {
+  "file": "inclusionAI__Ling-3.0-tiny",
+  "id": "inclusionAI/Ling-3.0-tiny",
+  "rank": 289,
+  "error": null
+ },
+ {
+  "file": "ornith-ai__Ornith-1.5-9B-GGUF",
+  "id": "ornith-ai/Ornith-1.5-9B-GGUF",
+  "rank": 290,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "nanonets__Nanonets-OCR2-3B",
+  "id": "nanonets/Nanonets-OCR2-3B",
+  "rank": 291,
+  "error": null
+ },
+ {
+  "file": "TeichAI__GLM-4.7-Flash-Claude-Opus-4.5-High-Reasoning-Distill-GGUF",
+  "id": "TeichAI/GLM-4.7-Flash-Claude-Opus-4.5-High-Reasoning-Distill-GGUF",
+  "rank": 292,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "amazon__chronos-2",
+  "id": "amazon/chronos-2",
+  "rank": 293,
+  "error": null
+ },
+ {
+  "file": "lilylilith__AnyPose",
+  "id": "lilylilith/AnyPose",
+  "rank": 294,
+  "error": null
+ },
+ {
+  "file": "google__gemma-4-E2B",
+  "id": "google/gemma-4-E2B",
+  "rank": 295,
+  "error": null
+ },
+ {
+  "file": "Noctaluna__Noct-Q-Uncensored-Qwen-Image-2.1",
+  "id": "Noctaluna/Noct-Q-Uncensored-Qwen-Image-2.1",
+  "rank": 296,
+  "error": null
+ },
+ {
+  "file": "inclusionAI__Ling-2.6-1T",
+  "id": "inclusionAI/Ling-2.6-1T",
+  "rank": 297,
+  "error": null
+ },
+ {
+  "file": "inclusionAI__Ling-2.6-flash",
+  "id": "inclusionAI/Ling-2.6-flash",
+  "rank": 298,
+  "error": null
+ },
+ {
+  "file": "tencent__Hy-MT2-30B-A3B",
+  "id": "tencent/Hy-MT2-30B-A3B",
+  "rank": 299,
+  "error": null
+ },
+ {
+  "file": "ornith-ai__Ornith-1.0-35B",
+  "id": "ornith-ai/Ornith-1.0-35B",
+  "rank": 300,
+  "error": null
  }
 ]

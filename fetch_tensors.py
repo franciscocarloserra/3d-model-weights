@@ -17,7 +17,7 @@ from huggingface_hub import list_repo_files, parse_safetensors_file_metadata
 TOP = 300
 MODELS_URL = "https://franciscocarloserra.github.io/hf-top-models/data/models.json"
 SLEEP = 0.1  # seconds each worker waits between requests
-WORKERS = 3  # parallel header requests within a repo (logged-in rate limits)
+WORKERS = 8  # parallel header requests within a repo (logged-in rate limits)
 RETRY_WAIT = 60  # seconds to wait after a 429
 
 DATA = pathlib.Path(__file__).with_name("data")
