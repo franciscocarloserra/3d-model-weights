@@ -316,5 +316,203 @@
   "id": "zai-org/GLM-4.7-Flash",
   "rank": 53,
   "error": null
+ },
+ {
+  "file": "zai-org__GLM-5.1",
+  "id": "zai-org/GLM-5.1",
+  "rank": 54,
+  "error": null
+ },
+ {
+  "file": "XingChen-AGI__Xing4.0-29B-A4B",
+  "id": "XingChen-AGI/Xing4.0-29B-A4B",
+  "rank": 55,
+  "error": null
+ },
+ {
+  "file": "froggeric__Qwen-Fixed-Chat-Templates",
+  "id": "froggeric/Qwen-Fixed-Chat-Templates",
+  "rank": 56,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "thinkingmachines__Inkling",
+  "id": "thinkingmachines/Inkling",
+  "rank": 57,
+  "error": null
+ },
+ {
+  "file": "orcarouter__Qwen3.8-27B-Uncensored-FP8",
+  "id": "orcarouter/Qwen3.8-27B-Uncensored-FP8",
+  "rank": 58,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a03b-2c433d9c609956f716edb462;5d2fa377-723f-455c-bdff-a75bcc4e0e14)\n\nCannot access gated repo for url https://huggingface.co/orcarouter/Qwen3.8-27B-Uncensored-FP8/resolve/main/model-00001-of-00007.safetensors.\nAccess to model orcarouter/Qwen3"
+ },
+ {
+  "file": "Lightricks__LTX-2",
+  "id": "Lightricks/LTX-2",
+  "rank": 59,
+  "error": null
+ },
+ {
+  "file": "openai__privacy-filter",
+  "id": "openai/privacy-filter",
+  "rank": 60,
+  "error": null
+ },
+ {
+  "file": "HauhauCS__Qwen3.8-27B-Uncensored-HauhauCS-Aggressive-MTP-GGUF",
+  "id": "HauhauCS/Qwen3.8-27B-Uncensored-HauhauCS-Aggressive-MTP-GGUF",
+  "rank": 61,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "dealignai__Gemma-4-31B-JANG_4M-CRACK",
+  "id": "dealignai/Gemma-4-31B-JANG_4M-CRACK",
+  "rank": 62,
+  "error": null
+ },
+ {
+  "file": "openbmb__MiniCPM5-2B",
+  "id": "openbmb/MiniCPM5-2B",
+  "rank": 63,
+  "error": null
+ },
+ {
+  "file": "moonshotai__Kimi-K2-Thinking",
+  "id": "moonshotai/Kimi-K2-Thinking",
+  "rank": 64,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen3-Coder-Next",
+  "id": "Qwen/Qwen3-Coder-Next",
+  "rank": 65,
+  "error": null
+ },
+ {
+  "file": "google__gemma-4-E4B-it",
+  "id": "google/gemma-4-E4B-it",
+  "rank": 66,
+  "error": null
+ },
+ {
+  "file": "openbmb__VoxCPM2",
+  "id": "openbmb/VoxCPM2",
+  "rank": 67,
+  "error": null
+ },
+ {
+  "file": "unsloth__Qwen3.6-35B-A3B-GGUF",
+  "id": "unsloth/Qwen3.6-35B-A3B-GGUF",
+  "rank": 68,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "PaddlePaddle__PaddleOCR-VL",
+  "id": "PaddlePaddle/PaddleOCR-VL",
+  "rank": 69,
+  "error": null
+ },
+ {
+  "file": "yuxinlu1__gemma-4-12B-agentic-fable5-composer2.5-v2-3.5x-tau2-GGUF",
+  "id": "yuxinlu1/gemma-4-12B-agentic-fable5-composer2.5-v2-3.5x-tau2-GGUF",
+  "rank": 70,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "black-forest-labs__FLUX.2-klein-9B",
+  "id": "black-forest-labs/FLUX.2-klein-9B",
+  "rank": 71,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a081-31f7bd644b58cec554988af8;949d1903-1a9d-46a9-a0f9-31ceaeea1069)\n\nCannot access gated repo for url https://huggingface.co/black-forest-labs/FLUX.2-klein-9B/resolve/main/flux-2-klein-9b.safetensors.\nAccess to model black-forest-labs/FLUX.2-"
+ },
+ {
+  "file": "google__gemma-4-12B-it",
+  "id": "google/gemma-4-12B-it",
+  "rank": 72,
+  "error": null
+ },
+ {
+  "file": "DavidAU__Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF",
+  "id": "DavidAU/Qwen3.8-27B-TURBO-Fable-Cold-Fusion-735-882-Heretic-Uncensored-NEO-CODER-MAX-MTP-GGUF",
+  "rank": 73,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "google__gemma-4-26B-A4B-it",
+  "id": "google/gemma-4-26B-A4B-it",
+  "rank": 74,
+  "error": null
+ },
+ {
+  "file": "moonshotai__Kimi-K2.6",
+  "id": "moonshotai/Kimi-K2.6",
+  "rank": 75,
+  "error": null
+ },
+ {
+  "file": "krea__Krea-2-Turbo",
+  "id": "krea/Krea-2-Turbo",
+  "rank": 76,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a0a5-0b5608813799ed6a6acaff86;130120a7-f4bb-4ba3-ad43-000613ab4743)\n\nCannot access gated repo for url https://huggingface.co/krea/Krea-2-Turbo/resolve/main/text_encoder/model.safetensors.\nAccess to model krea/Krea-2-Turbo is restricted and yo"
+ },
+ {
+  "file": "fal__Qwen-Image-Edit-2511-Multiple-Angles-LoRA",
+  "id": "fal/Qwen-Image-Edit-2511-Multiple-Angles-LoRA",
+  "rank": 77,
+  "error": null
+ },
+ {
+  "file": "MiniMaxAI__MiniMax-M3",
+  "id": "MiniMaxAI/MiniMax-M3",
+  "rank": 78,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen3.5-397B-A17B",
+  "id": "Qwen/Qwen3.5-397B-A17B",
+  "rank": 79,
+  "error": null
+ },
+ {
+  "file": "google__embeddinggemma-2",
+  "id": "google/embeddinggemma-2",
+  "rank": 80,
+  "error": null
+ },
+ {
+  "file": "orcarouter__Qwen3.8-27B-Uncensored-MLX",
+  "id": "orcarouter/Qwen3.8-27B-Uncensored-MLX",
+  "rank": 81,
+  "error": null
+ },
+ {
+  "file": "JonathanColetti__Qwen3.8-27B-Uncensored-GGUF",
+  "id": "JonathanColetti/Qwen3.8-27B-Uncensored-GGUF",
+  "rank": 82,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "Qwen__Qwen3.5-35B-A3B",
+  "id": "Qwen/Qwen3.5-35B-A3B",
+  "rank": 83,
+  "error": null
+ },
+ {
+  "file": "openbmb__MiniCPM-o-4_5",
+  "id": "openbmb/MiniCPM-o-4_5",
+  "rank": 84,
+  "error": null
+ },
+ {
+  "file": "HauhauCS__Qwen3.5-35B-A3B-Uncensored-HauhauCS-Aggressive",
+  "id": "HauhauCS/Qwen3.5-35B-A3B-Uncensored-HauhauCS-Aggressive",
+  "rank": 85,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "deepseek-ai__DeepSeek-V3.2",
+  "id": "deepseek-ai/DeepSeek-V3.2",
+  "rank": 86,
+  "error": null
  }
 ]

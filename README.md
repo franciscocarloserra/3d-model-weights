@@ -19,3 +19,7 @@ Click a slab (or a row in the tensor panel on the right) to select that subcompo
 - Shapes come from the headers. Sizes are params × dtype bytes, i.e. the file size, not inference memory.
 - Per-expert MoE tensors are stored once with a count (`experts.*.w1 ×384`). Fused 3D expert tensors are drawn the same way.
 - Layer grouping and the attention/mlp colors are guessed from tensor names. Unusual architectures can come out odd.
+
+## License
+
+Code: MIT, see `LICENSE`. The data in `data/tensors/` is tensor names, shapes and dtypes read from public Hugging Face repos. It belongs to the original model owners and stays under each model's own license. No weights are included. Not affiliated with Hugging Face or any model publisher.

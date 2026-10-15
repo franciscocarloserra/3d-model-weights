@@ -11,7 +11,8 @@
  #side{position:fixed;top:0;left:0;bottom:31px;width:230px;z-index:2;overflow-y:auto;background:#121418;border-right:1px solid #1f232a}
  #side #brand{display:flex;align-items:center;gap:10px;padding:12px 10px 4px;color:#fff;font-size:18px;font-weight:700;line-height:1.15;white-space:normal}
  #brand img{width:48px;height:48px;border-radius:8px}
- #side #from{display:block;padding:0 10px 4px 68px;color:#8a8f98;font-size:11px;text-decoration:none} #side #from:hover{color:#c8ccd2}
+ #side .from{display:block;padding:0 10px 4px 68px;color:#8a8f98;font-size:11px;text-decoration:none} #side .from:hover{color:#c8ccd2}
+ #note{margin:10px;color:#5d636c;font-size:10px;line-height:1.4}
  #side input{width:calc(100% - 20px);margin:8px 10px;background:#0d0f12;color:#c8ccd2;border:1px solid #2a2f38;border-radius:3px;padding:4px 6px}
  #side a{display:block;padding:3px 10px;color:#c8ccd2;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
  #side a:hover{background:#1b1f26} #side a.on{background:#24364d;color:#fff} #side a.off{color:#555b63}
@@ -34,7 +35,7 @@
 </style>
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 </head><body>
-<nav id="side"><a id="brand" href="?"><img src="logo.png" alt="">3D Model Weights</a><a id="from" href="https://franciscocarloserra.github.io/hf-top-models/">top 300 by likes ↗</a><input id="q" placeholder="filter"><div id="list"></div></nav>
+<nav id="side"><a id="brand" href="?"><img src="logo.png" alt="">3D Model Weights</a><a class="from" href="https://franciscocarloserra.github.io/hf-top-models/">top 300 by likes ↗</a><a class="from" href="https://github.com/franciscocarloserra/3d-model-weights">source on GitHub ↗</a><input id="q" placeholder="filter"><div id="list"></div><p id="note">Tensor names and shapes belong to the original model owners, under each model's license. No weights included. MIT code.</p></nav>
 <header><h1><span id="title"></span><span id="msg"></span></h1><div id="cards"></div></header>
 <div id="view"></div>
 <aside id="raw"><input id="rq" placeholder="filter tensors"><div id="rows"></div></aside>
