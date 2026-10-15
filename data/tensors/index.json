@@ -1,0 +1,320 @@
+[
+ {
+  "file": "Qwen__Qwen3.8-27B",
+  "id": "Qwen/Qwen3.8-27B",
+  "rank": 1,
+  "error": null
+ },
+ {
+  "file": "moonshotai__Kimi-K3",
+  "id": "moonshotai/Kimi-K3",
+  "rank": 2,
+  "error": null
+ },
+ {
+  "file": "Lightricks__LTX-2.5",
+  "id": "Lightricks/LTX-2.5",
+  "rank": 3,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad09a03-42ff43177e3b887517d79ce3;98e0b3fa-ef18-4519-a749-653ad5b0f06f)\n\nCannot access gated repo for url https://huggingface.co/Lightricks/LTX-2.5/resolve/main/diffusion_models/ltx-2.5-22b-dev-transformer-bf16.safetensors.\nAccess to model Lightr"
+ },
+ {
+  "file": "Qwen__Qwen3.8-Flash-Next",
+  "id": "Qwen/Qwen3.8-Flash-Next",
+  "rank": 4,
+  "error": null
+ },
+ {
+  "file": "MiniMaxAI__MiniMax-H3",
+  "id": "MiniMaxAI/MiniMax-H3",
+  "rank": 5,
+  "error": null
+ },
+ {
+  "file": "deepseek-ai__DeepSeek-V4-Pro",
+  "id": "deepseek-ai/DeepSeek-V4-Pro",
+  "rank": 6,
+  "error": null
+ },
+ {
+  "file": "convaiinnovations__laya",
+  "id": "convaiinnovations/laya",
+  "rank": 7,
+  "error": null
+ },
+ {
+  "file": "Tongyi-MAI__Z-Image-Turbo",
+  "id": "Tongyi-MAI/Z-Image-Turbo",
+  "rank": 8,
+  "error": null
+ },
+ {
+  "file": "zai-org__GLM-5.2",
+  "id": "zai-org/GLM-5.2",
+  "rank": 9,
+  "error": null
+ },
+ {
+  "file": "unsloth__Qwen3.8-27B-GGUF",
+  "id": "unsloth/Qwen3.8-27B-GGUF",
+  "rank": 10,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "baidu__Unlimited-OCR",
+  "id": "baidu/Unlimited-OCR",
+  "rank": 11,
+  "error": null
+ },
+ {
+  "file": "deepseek-ai__DeepSeek-V4.1-Flash",
+  "id": "deepseek-ai/DeepSeek-V4.1-Flash",
+  "rank": 12,
+  "error": null
+ },
+ {
+  "file": "google__gemma-4-31B-it",
+  "id": "google/gemma-4-31B-it",
+  "rank": 13,
+  "error": null
+ },
+ {
+  "file": "facebook__sam3",
+  "id": "facebook/sam3",
+  "rank": 14,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad09d50-30b7b94f2da0aac82bf5c887;3f849480-d7c4-4fce-83ae-95e7fda9e1ee)\n\nCannot access gated repo for url https://huggingface.co/facebook/sam3/resolve/main/model.safetensors.\nAccess to model facebook/sam3 is restricted and you are not in the auth"
+ },
+ {
+  "file": "deepseek-ai__DeepSeek-V4-Flash-0731",
+  "id": "deepseek-ai/DeepSeek-V4-Flash-0731",
+  "rank": 15,
+  "error": null
+ },
+ {
+  "file": "abenzerps__Qwen-Image-2.1-Uncensored-GGUF",
+  "id": "abenzerps/Qwen-Image-2.1-Uncensored-GGUF",
+  "rank": 16,
+  "error": null
+ },
+ {
+  "file": "HauhauCS__Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive",
+  "id": "HauhauCS/Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive",
+  "rank": 17,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "autotrust__JEV-27B-VL",
+  "id": "autotrust/JEV-27B-VL",
+  "rank": 18,
+  "error": null
+ },
+ {
+  "file": "Edge0__Edge0-35B-A3B-preview",
+  "id": "Edge0/Edge0-35B-A3B-preview",
+  "rank": 19,
+  "error": null
+ },
+ {
+  "file": "deepseek-ai__DeepSeek-OCR",
+  "id": "deepseek-ai/DeepSeek-OCR",
+  "rank": 20,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen-Image-2.1",
+  "id": "Qwen/Qwen-Image-2.1",
+  "rank": 21,
+  "error": null
+ },
+ {
+  "file": "nvidia__LocateAnything-3B",
+  "id": "nvidia/LocateAnything-3B",
+  "rank": 22,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen3.6-35B-A3B",
+  "id": "Qwen/Qwen3.6-35B-A3B",
+  "rank": 23,
+  "error": null
+ },
+ {
+  "file": "Jackrong__Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled",
+  "id": "Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled",
+  "rank": 24,
+  "error": null
+ },
+ {
+  "file": "yuxinlu1__gemma-4-12B-coder-fable5-composer2.5-v1-GGUF",
+  "id": "yuxinlu1/gemma-4-12B-coder-fable5-composer2.5-v1-GGUF",
+  "rank": 25,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "TaichuAI__ZDTaichu5.0-9B",
+  "id": "TaichuAI/ZDTaichu5.0-9B",
+  "rank": 26,
+  "error": null
+ },
+ {
+  "file": "moonshotai__Kimi-K2.5",
+  "id": "moonshotai/Kimi-K2.5",
+  "rank": 27,
+  "error": null
+ },
+ {
+  "file": "empero-ai__Qwythos-9B-Claude-Mythos-5-1M-GGUF",
+  "id": "empero-ai/Qwythos-9B-Claude-Mythos-5-1M-GGUF",
+  "rank": 28,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "nvidia__personaplex-7b-v1",
+  "id": "nvidia/personaplex-7b-v1",
+  "rank": 29,
+  "error": null
+ },
+ {
+  "file": "zai-org__GLM-5.3-Flash",
+  "id": "zai-org/GLM-5.3-Flash",
+  "rank": 30,
+  "error": null
+ },
+ {
+  "file": "prism-ml__Ternary-Bonsai-2-27B-gguf",
+  "id": "prism-ml/Ternary-Bonsai-2-27B-gguf",
+  "rank": 31,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "TokenRhythm__NeoHorse-1-4B",
+  "id": "TokenRhythm/NeoHorse-1-4B",
+  "rank": 32,
+  "error": null
+ },
+ {
+  "file": "Edge0__Audio8-ASR-Infinite",
+  "id": "Edge0/Audio8-ASR-Infinite",
+  "rank": 33,
+  "error": null
+ },
+ {
+  "file": "DavidAU__Qwen3.6-27B-Fable-Fusion-711-Uncensored-Heretic-NM-DAU-NEO-MAX-MTP-GGUF",
+  "id": "DavidAU/Qwen3.6-27B-Fable-Fusion-711-Uncensored-Heretic-NM-DAU-NEO-MAX-MTP-GGUF",
+  "rank": 34,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "black-forest-labs__FLUX.2-dev",
+  "id": "black-forest-labs/FLUX.2-dev",
+  "rank": 35,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad09eca-4e71d64d68842cb10e04dbe8;1662834e-7669-46bf-ad2c-e044ee8df804)\n\nCannot access gated repo for url https://huggingface.co/black-forest-labs/FLUX.2-dev/resolve/main/ae.safetensors.\nAccess to model black-forest-labs/FLUX.2-dev is restricted "
+ },
+ {
+  "file": "circlestone-labs__Anima",
+  "id": "circlestone-labs/Anima",
+  "rank": 36,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen3.6-27B",
+  "id": "Qwen/Qwen3.6-27B",
+  "rank": 37,
+  "error": null
+ },
+ {
+  "file": "autotrust__GEV-26B-Decide",
+  "id": "autotrust/GEV-26B-Decide",
+  "rank": 38,
+  "error": null
+ },
+ {
+  "file": "deepseek-ai__DeepSeek-V4-Flash",
+  "id": "deepseek-ai/DeepSeek-V4-Flash",
+  "rank": 39,
+  "error": null
+ },
+ {
+  "file": "HauhauCS__Qwen3.5-9B-Uncensored-HauhauCS-Aggressive",
+  "id": "HauhauCS/Qwen3.5-9B-Uncensored-HauhauCS-Aggressive",
+  "rank": 40,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "Comfy-Org__MiniMax-H3",
+  "id": "Comfy-Org/MiniMax-H3",
+  "rank": 41,
+  "error": null
+ },
+ {
+  "file": "zai-org__GLM-5.3",
+  "id": "zai-org/GLM-5.3",
+  "rank": 42,
+  "error": null
+ },
+ {
+  "file": "SulphurAI__Sulphur-2-base",
+  "id": "SulphurAI/Sulphur-2-base",
+  "rank": 43,
+  "error": null
+ },
+ {
+  "file": "Qwen__Qwen3.5-9B",
+  "id": "Qwen/Qwen3.5-9B",
+  "rank": 44,
+  "error": null
+ },
+ {
+  "file": "zai-org__GLM-OCR",
+  "id": "zai-org/GLM-OCR",
+  "rank": 45,
+  "error": null
+ },
+ {
+  "file": "zai-org__GLM-5",
+  "id": "zai-org/GLM-5",
+  "rank": 46,
+  "error": null
+ },
+ {
+  "file": "ISTA-DASLab__Qwen3.8-27B-GSQ-RCO-GGUF",
+  "id": "ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF",
+  "rank": 47,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "Qwen__Qwen3-TTS-12Hz-1.7B-CustomVoice",
+  "id": "Qwen/Qwen3-TTS-12Hz-1.7B-CustomVoice",
+  "rank": 48,
+  "error": null
+ },
+ {
+  "file": "zai-org__GLM-4.7",
+  "id": "zai-org/GLM-4.7",
+  "rank": 49,
+  "error": null
+ },
+ {
+  "file": "Cloudflare__clef",
+  "id": "Cloudflare/clef",
+  "rank": 50,
+  "error": null
+ },
+ {
+  "file": "meta-models__Muse-Glimmer-30B",
+  "id": "meta-models/Muse-Glimmer-30B",
+  "rank": 51,
+  "error": null
+ },
+ {
+  "file": "Lightricks__LTX-2.3",
+  "id": "Lightricks/LTX-2.3",
+  "rank": 52,
+  "error": null
+ },
+ {
+  "file": "zai-org__GLM-4.7-Flash",
+  "id": "zai-org/GLM-4.7-Flash",
+  "rank": 53,
+  "error": null
+ }
+]
