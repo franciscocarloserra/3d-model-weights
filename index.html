@@ -63,6 +63,7 @@ const STACK_GAP = 6;     // vertical gap between input / layers / output
 const SIDE_GAP = 25;     // gap between bands of secondary stacks
 const WRAP_GAP = 1.5;    // input/output rows wider than the layers wrap into lines this far apart
 const FUSED_MIN = 16;    // 3D tensor [n, out, in] with in > this = n fused experts, drawn as n stacked [out, in]
+const GRID = {cells: 40, color: 0x1c2027, major: 0x262b33};  // background grid behind the model, cells along its longest side
 const LABEL_CULL_MS = 150; // hide overlapping labels at most this often while the camera moves
 const LABEL_EVERY = 8;   // layer index label every N layers
 const LABELED_TYPES = 3; // per stack, label the first N distinct layer types
@@ -314,6 +315,10 @@ for (const m of meshes) bounds.expandByObject(m);
 const c = bounds.getCenter(new THREE.Vector3()), sz = bounds.getSize(new THREE.Vector3());
 const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)), dist = FIT * Math.max(sz.y / 2 / tanV, sz.x / 2 / (tanV * aspect)) + sz.z / 2 || 50;
 controls.target.copy(c);
+{ // soft reference grid on a plane behind the model (GridHelper is XZ: turn it to XY)
+  const n = Math.max(sz.x, sz.y) * 1.4 || 50, g = new THREE.GridHelper(n, GRID.cells, GRID.major, GRID.color);
+  g.rotation.x = Math.PI / 2; g.position.set(c.x, c.y, bounds.min.z - 2); scene.add(g);
+}
 camera.position.copy(c).add(new THREE.Vector3(-0.25, 0.2, 1).normalize().multiplyScalar(dist));
 
 const ray = new THREE.Raycaster(), mouse = new THREE.Vector2();

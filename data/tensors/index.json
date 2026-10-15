@@ -976,5 +976,221 @@
   "id": "maya-research/maya1",
   "rank": 163,
   "error": null
+ },
+ {
+  "file": "Qwen__Qwen3.8-27B-FP8",
+  "id": "Qwen/Qwen3.8-27B-FP8",
+  "rank": 164,
+  "error": null
+ },
+ {
+  "file": "ACE-Step__Ace-Step1.5",
+  "id": "ACE-Step/Ace-Step1.5",
+  "rank": 165,
+  "error": null
+ },
+ {
+  "file": "unsloth__gemma-4-12b-it-GGUF",
+  "id": "unsloth/gemma-4-12b-it-GGUF",
+  "rank": 166,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "Aleph-Alpha__Kolibri-1",
+  "id": "Aleph-Alpha/Kolibri-1",
+  "rank": 167,
+  "error": null
+ },
+ {
+  "file": "unsloth__Qwen3-Coder-Next-GGUF",
+  "id": "unsloth/Qwen3-Coder-Next-GGUF",
+  "rank": 168,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "RuneXX__LTX-2.3-Workflows",
+  "id": "RuneXX/LTX-2.3-Workflows",
+  "rank": 169,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "google__translategemma-4b-it",
+  "id": "google/translategemma-4b-it",
+  "rank": 170,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a324-04ffccb3134efd314f855921;92abd3a3-9d8a-4fe0-839e-e02948532950)\n\nCannot access gated repo for url https://huggingface.co/google/translategemma-4b-it/resolve/main/model-00001-of-00002.safetensors.\nAccess to model google/translategemma-4b-i"
+ },
+ {
+  "file": "deepseek-ai__DeepSeek-V4-Pro-0813",
+  "id": "deepseek-ai/DeepSeek-V4-Pro-0813",
+  "rank": 171,
+  "error": null
+ },
+ {
+  "file": "unsloth__Qwen3.5-35B-A3B-GGUF",
+  "id": "unsloth/Qwen3.5-35B-A3B-GGUF",
+  "rank": 172,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "nex-agi__Nex-N2.5-mini",
+  "id": "nex-agi/Nex-N2.5-mini",
+  "rank": 173,
+  "error": null
+ },
+ {
+  "file": "meituan-longcat__LongCat-Video-Avatar-1.5",
+  "id": "meituan-longcat/LongCat-Video-Avatar-1.5",
+  "rank": 174,
+  "error": null
+ },
+ {
+  "file": "WeiboAI__VibeThinker-3B",
+  "id": "WeiboAI/VibeThinker-3B",
+  "rank": 175,
+  "error": null
+ },
+ {
+  "file": "Altworld__Hemmingway-1",
+  "id": "Altworld/Hemmingway-1",
+  "rank": 176,
+  "error": null
+ },
+ {
+  "file": "ideogram-ai__ideogram-4-fp8",
+  "id": "ideogram-ai/ideogram-4-fp8",
+  "rank": 177,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a353-1ea4d4b427cd8eb1440ab856;95e58534-39c4-4c3b-8c07-ec7122c44d05)\n\nCannot access gated repo for url https://huggingface.co/ideogram-ai/ideogram-4-fp8/resolve/main/text_encoder/model.safetensors.\nAccess to model ideogram-ai/ideogram-4-fp8 is"
+ },
+ {
+  "file": "stepfun-ai__Step-3.5-Flash",
+  "id": "stepfun-ai/Step-3.5-Flash",
+  "rank": 178,
+  "error": null
+ },
+ {
+  "file": "lightonai__LightOnOCR-2-1B",
+  "id": "lightonai/LightOnOCR-2-1B",
+  "rank": 179,
+  "error": null
+ },
+ {
+  "file": "tencent__HunyuanOCR",
+  "id": "tencent/HunyuanOCR",
+  "rank": 180,
+  "error": null
+ },
+ {
+  "file": "nvidia__NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "id": "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B-BF16",
+  "rank": 181,
+  "error": null
+ },
+ {
+  "file": "sapientinc__HRM-Text-1B",
+  "id": "sapientinc/HRM-Text-1B",
+  "rank": 182,
+  "error": null
+ },
+ {
+  "file": "conradlocke__krea2-identity-edit",
+  "id": "conradlocke/krea2-identity-edit",
+  "rank": 183,
+  "error": null
+ },
+ {
+  "file": "Nanbeige__Nanbeige4.2-3B",
+  "id": "Nanbeige/Nanbeige4.2-3B",
+  "rank": 184,
+  "error": null
+ },
+ {
+  "file": "OBLITERATUS__gemma-4-E4B-it-OBLITERATED",
+  "id": "OBLITERATUS/gemma-4-E4B-it-OBLITERATED",
+  "rank": 185,
+  "error": null
+ },
+ {
+  "file": "LiquidAI__LFM2.5-2.6B",
+  "id": "LiquidAI/LFM2.5-2.6B",
+  "rank": 186,
+  "error": null
+ },
+ {
+  "file": "bosonai__higgs-tts-3-4b",
+  "id": "bosonai/higgs-tts-3-4b",
+  "rank": 187,
+  "error": null
+ },
+ {
+  "file": "prism-ml__Bonsai-8B-gguf",
+  "id": "prism-ml/Bonsai-8B-gguf",
+  "rank": 188,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "LiquidAI__LFM2.5-8B-A1B",
+  "id": "LiquidAI/LFM2.5-8B-A1B",
+  "rank": 189,
+  "error": null
+ },
+ {
+  "file": "TenStrip__10Eros-Max",
+  "id": "TenStrip/10Eros-Max",
+  "rank": 190,
+  "error": null
+ },
+ {
+  "file": "ISTA-DASLab__Qwen3.8-Flash-Next-GSQ-RCO-GGUF",
+  "id": "ISTA-DASLab/Qwen3.8-Flash-Next-GSQ-RCO-GGUF",
+  "rank": 191,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "unsloth__DeepSeek-V4-Flash-0731-GGUF",
+  "id": "unsloth/DeepSeek-V4-Flash-0731-GGUF",
+  "rank": 192,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "google__gemma-4-12B",
+  "id": "google/gemma-4-12B",
+  "rank": 193,
+  "error": null
+ },
+ {
+  "file": "DavidAU__Qwen3.6-40B-Claude-4.6-Opus-Deckard-Heretic-Uncensored-Thinking-NEO-CODE-Di-IMatrix-MAX-GGUF",
+  "id": "DavidAU/Qwen3.6-40B-Claude-4.6-Opus-Deckard-Heretic-Uncensored-Thinking-NEO-CODE-Di-IMatrix-MAX-GGUF",
+  "rank": 194,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "XiaomiMiMo__MiMo-V2.5-Pro",
+  "id": "XiaomiMiMo/MiMo-V2.5-Pro",
+  "rank": 195,
+  "error": null
+ },
+ {
+  "file": "Contrastive-LM__CLM-v0.1-8B",
+  "id": "Contrastive-LM/CLM-v0.1-8B",
+  "rank": 196,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "black-forest-labs__FLUX.2-klein-9b-fp8",
+  "id": "black-forest-labs/FLUX.2-klein-9b-fp8",
+  "rank": 197,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a394-4c5fc65a102eeb5e7a89b6a4;5f50593d-e8ab-4b45-886b-7a28d5dc0387)\n\nCannot access gated repo for url https://huggingface.co/black-forest-labs/FLUX.2-klein-9b-fp8/resolve/main/flux-2-klein-9b-fp8.safetensors.\nAccess to model black-forest-labs"
+ },
+ {
+  "file": "salakash__SamKash-Tolstoy",
+  "id": "salakash/SamKash-Tolstoy",
+  "rank": 198,
+  "error": null
+ },
+ {
+  "file": "upstage__Solar-Open2-250B",
+  "id": "upstage/Solar-Open2-250B",
+  "rank": 199,
+  "error": null
  }
 ]
