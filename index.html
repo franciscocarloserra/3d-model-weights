@@ -194,10 +194,10 @@ const slab = (t, x, y) => {  // matrix [out, in...]: in along x, out along z
   return {w, d};
 };
 const row = (list, x0, y, labelIt, stack, step, inLayer, maxW = Infinity) => {  // slabs left to right, mlp block after a wider gap
-  let x = x0, prevMlp = null, w = 0, y0 = y;
+  let x = x0, prevMlp = null, rw = 0, y0 = y;
   for (const t of list) {
     const tw = side(numel(t.dims.slice(1)));
-    if (x > x0 && x - x0 + tw > maxW) { w = Math.max(w, x - x0); x = x0; y -= WRAP_GAP; }
+    if (x > x0 && x - x0 + tw > maxW) { rw = Math.max(rw, x - x0); x = x0; y -= WRAP_GAP; }
     const isMlp = inLayer && IS_MLP.test(t.key);
     if (prevMlp === false && isMlp) x += BLOCK_GAP - COL_GAP;
     Object.assign(t, {stack, step: step + (isMlp ? 1 : 0), io: step === 0 || WRITES.test(t.key || t.name) ? 'out' : 'in'});
@@ -207,7 +207,7 @@ const row = (list, x0, y, labelIt, stack, step, inLayer, maxW = Infinity) => {  
     x += w + COL_GAP; prevMlp = isMlp;
   }
   row.h = y0 - y;
-  return Math.max(w, x - x0);
+  return Math.max(rw, x - x0);
 };
 const rowW = list => list.reduce((w, t) => w + side(numel(t.dims.slice(1))) + COL_GAP, 0) + BLOCK_GAP;
 const aspect = view.clientWidth / view.clientHeight;

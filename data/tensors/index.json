@@ -1498,5 +1498,41 @@
   "id": "ukisai/Swift-Qwen3.8-27b",
   "rank": 250,
   "error": null
+ },
+ {
+  "file": "Kijai__LTX2.3_comfy",
+  "id": "Kijai/LTX2.3_comfy",
+  "rank": 251,
+  "error": null
+ },
+ {
+  "file": "microsoft__Fara-7B",
+  "id": "microsoft/Fara-7B",
+  "rank": 252,
+  "error": null
+ },
+ {
+  "file": "Jackrong__Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF",
+  "id": "Jackrong/Qwen3.5-27B-Claude-4.6-Opus-Reasoning-Distilled-v2-GGUF",
+  "rank": 253,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "HauhauCS__Qwen3.5-4B-Uncensored-HauhauCS-Aggressive",
+  "id": "HauhauCS/Qwen3.5-4B-Uncensored-HauhauCS-Aggressive",
+  "rank": 254,
+  "error": "no .safetensors files"
+ },
+ {
+  "file": "moonshotai__Kimi-Linear-48B-A3B-Instruct",
+  "id": "moonshotai/Kimi-Linear-48B-A3B-Instruct",
+  "rank": 255,
+  "error": null
+ },
+ {
+  "file": "NemoStation__Marlin-2B",
+  "id": "NemoStation/Marlin-2B",
+  "rank": 256,
+  "error": "GatedRepoError: 403 Client Error. (Request ID: Root=1-6ad0a5ca-5c2bacc641d573475ad8776f;63625553-dd4e-4607-9e21-0bfdd71e7093)\n\nCannot access gated repo for url https://huggingface.co/NemoStation/Marlin-2B/resolve/main/model-00001-of-00002.safetensors.\nAccess to model NemoStation/Marlin-2B is restric"
  }
 ]
